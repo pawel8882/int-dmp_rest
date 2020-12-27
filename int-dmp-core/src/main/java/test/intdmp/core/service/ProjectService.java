@@ -19,7 +19,7 @@ public class ProjectService {
     }
 
     public List<Project> getProjectList() {
-        return Collections.emptyList();
+        return getAllProjects();
     }
 
     public Project getProject(Integer projectId) {
@@ -39,4 +39,10 @@ public class ProjectService {
     public void removeProject(Integer projectId) {
 
     }
+
+    public List<Project> getAllProjects() {
+
+       return entityManager.createQuery("SELECT a FROM Project a", Project.class).getResultList();
+    }
+
 }
