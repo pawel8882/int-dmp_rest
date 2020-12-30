@@ -32,7 +32,7 @@ public class ProjectsController {
     }
 
     @RequestMapping(value = "/{projectId}", method = RequestMethod.PUT)
-    public void updateProject(@RequestParam("projectId") Integer projectId, @RequestBody Project project) {
+    public void updateProject(@PathVariable("projectId") Integer projectId, @RequestBody Project project) {
         projectService.updateProject(projectId, project);
     }
 

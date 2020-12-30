@@ -8,10 +8,10 @@ import java.io.Serializable;
 @Entity
 public class ProjectDetails implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
 
-    public String detailName;
+    public String description;
 
     @JsonBackReference
     @ManyToOne
@@ -33,11 +33,11 @@ public class ProjectDetails implements Serializable {
         this.project = project;
     }
 
-    public String getDetailName() {
-        return detailName;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDetailName(String detailName) {
-        this.detailName = detailName;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

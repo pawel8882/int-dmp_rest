@@ -22,9 +22,7 @@ public class ProjectService {
         return getAllProjects();
     }
 
-    public Project getProject(Integer projectId) {
-        return entityManager.find(Project.class, projectId);
-    }
+    public Project getProject(Integer projectId) { return DetailedProject(projectId); }
 
     public Integer createProject(Project project) {
         project.getDetails().forEach(projectDetails -> projectDetails.setProject(project));
@@ -34,15 +32,32 @@ public class ProjectService {
 
     public void updateProject(Integer projectId, Project project) {
 
+        Project toUpdate = entityManager.find(Project.class, projectId);
+        toUpdate.setName(project.getName());
+        toUpdate.setComplete(project.isComplete());
+        toUpdate.setNumber(project.getNumber());
+        entityManager.merge(toUpdate);
+
+
     }
 
     public void removeProject(Integer projectId) {
+
+        entityManager.remove(entityManager.find(Project.class, projectId));
 
     }
 
     public List<Project> getAllProjects() {
 
        return entityManager.createQuery("SELECT a FROM Project a", Project.class).getResultList();
+    }
+
+    public Project DetailedProject(Integer projectId) {
+
+        Project project = entityManager.find(Project.class, projectId);
+
+        return project;
+
     }
 
 }
