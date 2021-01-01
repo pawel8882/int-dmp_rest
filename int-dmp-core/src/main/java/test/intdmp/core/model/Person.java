@@ -45,6 +45,10 @@ public class Person implements Serializable {
 
     public void setRole(String role) { this.role = role; }
 
+    @JsonIgnoreProperties("person")
+    public Set<persons_projects> getProjects() {
+        return persons_projects;
+    }
 
 
 }

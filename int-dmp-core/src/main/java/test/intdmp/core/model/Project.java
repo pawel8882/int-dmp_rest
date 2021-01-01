@@ -1,8 +1,6 @@
 package test.intdmp.core.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -24,6 +22,10 @@ public class Project implements Serializable {
 
     @OneToMany(mappedBy = "project")
     private Set<persons_projects> persons_projects = new HashSet<>();
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<department> departments = new HashSet<>();
+
 
     public Integer getId() {
         return id;
@@ -70,5 +72,12 @@ public class Project implements Serializable {
         return persons_projects;
     }
 
+    public Set<Integer> getDepartmentId() {
+
+        Set<Integer> departments_id = new HashSet<>();
+        for (department dp : departments) { departments_id.add(dp.getId());  }
+        return departments_id;
+
+    }
 
 }
