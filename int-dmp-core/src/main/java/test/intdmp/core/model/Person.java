@@ -3,6 +3,7 @@ package test.intdmp.core.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import test.intdmp.core.model.person_messages.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -20,6 +21,12 @@ public class Person implements Serializable {
 
     @OneToMany(mappedBy = "person")
     private Set<persons_projects> persons_projects = new HashSet<>();
+    @OneToMany(mappedBy = "person")
+    private Set<CategoriesMessages> categories = new HashSet<>();
+    @OneToMany(mappedBy = "person")
+    private Set<DataMessages> dataMessages = new HashSet<>();
+    @OneToMany(mappedBy = "person")
+    private Set<DataReplyMessages> dataReplyMessages = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -48,6 +55,14 @@ public class Person implements Serializable {
     @JsonIgnoreProperties("person")
     public Set<persons_projects> getProjects() {
         return persons_projects;
+    }
+
+    public Set<CategoriesMessages> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<CategoriesMessages> categories) {
+        this.categories = categories;
     }
 
 

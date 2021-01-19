@@ -24,22 +24,22 @@ public class department implements Serializable {
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<test.intdmp.core.model.department_objects.menu> menu;
+    private Set<menu> menu;
 
     public Integer getId() {
         return id;
     }
 
-    public TreeSet<test.intdmp.core.model.department_objects.menu> getMenu() {
+    public TreeSet<menu> getMenu() {
 
-        Comparator<test.intdmp.core.model.department_objects.menu> comparator = Comparator.comparing(test.intdmp.core.model.department_objects.menu::getPlacement);
-        TreeSet<test.intdmp.core.model.department_objects.menu> menu_sorted = new TreeSet<>(comparator);
-        for (test.intdmp.core.model.department_objects.menu menu: menu) menu_sorted.add(menu);
+        Comparator<menu> comparator = Comparator.comparing(test.intdmp.core.model.department_objects.menu::getPlacement);
+        TreeSet<menu> menu_sorted = new TreeSet<>(comparator);
+        for (menu menu: menu) menu_sorted.add(menu);
         return menu_sorted;
 
     }
 
-    public void setItems(Set<test.intdmp.core.model.department_objects.menu> menu) {
+    public void setItems(Set<menu> menu) {
         this.menu = menu;
     }
 

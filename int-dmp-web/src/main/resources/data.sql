@@ -74,3 +74,8 @@ INSERT INTO menu_level2 (menu_level1_id, label, icon, placement) VALUES
 
 (1,'Folder', 'pi pi-fw pi-user-plus', 1),
 (1,'Plik', 'pi pi-fw pi-filter', 2);
+
+INSERT INTO header (title, concerns) VALUES
+
+('Folder', 'test1'),
+('Plik', 'test2');
