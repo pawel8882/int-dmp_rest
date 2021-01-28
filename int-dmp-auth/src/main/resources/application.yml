@@ -1,0 +1,9 @@
+server:
+  port: 8081
+keycloak:
+  server:
+    contextPath: /auth
+    adminUser:
+      username: admin
+      password: password
+    realmImportFile: int_dmp_realm.json

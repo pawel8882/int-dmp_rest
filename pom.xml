@@ -18,6 +18,7 @@
     <modules>
         <module>int-dmp-web</module>
         <module>int-dmp-core</module>
+        <module>int-dmp-auth</module>
     </modules>
 
     <properties>
