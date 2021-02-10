@@ -1,6 +1,7 @@
-package test.intdmp.core.model;
+package test.intdmp.core.model.projects;
 
 import com.fasterxml.jackson.annotation.*;
+import test.intdmp.core.model.person.messages.DataMessages;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,10 +22,13 @@ public class Project implements Serializable {
     private Set<ProjectDetails> details = new HashSet<>();
 
     @OneToMany(mappedBy = "project")
-    private Set<persons_projects> persons_projects = new HashSet<>();
+    private Set<test.intdmp.core.model.projects.PersonsProjects> PersonsProjects = new HashSet<>();
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<department> departments = new HashSet<>();
+    private Set<Department> departments = new HashSet<>();
+
+    @OneToMany(mappedBy = "project")
+    private Set<DataMessages> dataMessages = new HashSet<>();
 
 
     public Integer getId() {
@@ -67,15 +71,24 @@ public class Project implements Serializable {
         this.details = details;
     }
 
+    @JsonIgnore
+    public Set<DataMessages> getDataMessages() {
+        return dataMessages;
+    }
+
+    public void setDataMessages(Set<DataMessages> dataMessage) {
+        this.dataMessages = dataMessage;
+    }
+
     @JsonIgnoreProperties("project")
-    public Set<persons_projects> getPersons() {
-        return persons_projects;
+    public Set<PersonsProjects> getPersons() {
+        return PersonsProjects;
     }
 
     public Set<Integer> getDepartmentId() {
 
         Set<Integer> departments_id = new HashSet<>();
-        for (department dp : departments) { departments_id.add(dp.getId());  }
+        for (Department dp : departments) { departments_id.add(dp.getId());  }
         return departments_id;
 
     }

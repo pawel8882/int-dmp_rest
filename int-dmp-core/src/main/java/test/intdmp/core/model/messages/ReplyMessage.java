@@ -1,11 +1,7 @@
 package test.intdmp.core.model.messages;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import test.intdmp.core.model.Project;
-import test.intdmp.core.model.person_messages.DataMessages;
-import test.intdmp.core.model.person_messages.DataReplyMessages;
+import test.intdmp.core.model.person.messages.DataReplyMessages;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,11 +17,11 @@ public class ReplyMessage implements Serializable {
     public Timestamp timestamp;
     public String content;
 
-    @JsonBackReference
+    @JsonBackReference(value="reply")
     @ManyToOne
     public Message message;
 
-    @JsonBackReference
+    @JsonBackReference(value="personReply")
     @OneToMany(mappedBy = "person")
     private Set<DataReplyMessages> dataReplyMessages = new HashSet<>();
 

@@ -1,8 +1,7 @@
-package test.intdmp.core.model.department_objects;
+package test.intdmp.core.model.department.objects;
 
 import com.fasterxml.jackson.annotation.*;
-import test.intdmp.core.model.ProjectDetails;
-import test.intdmp.core.model.department;
+import test.intdmp.core.model.projects.Department;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -23,11 +22,11 @@ public class menu implements Serializable {
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<menu_level1> items = new HashSet<>();
+    private Set<menuLevel1> items = new HashSet<>();
 
     @JsonBackReference
     @ManyToOne
-    private department department;
+    private Department department;
 
     private Integer getId() {
         return id;
@@ -61,16 +60,16 @@ public class menu implements Serializable {
         this.icon = icon;
     }
 
-    public TreeSet<menu_level1> getItems() {
+    public TreeSet<menuLevel1> getItems() {
 
-        Comparator<menu_level1> comparator = Comparator.comparing(menu_level1::getPlacement);
-        TreeSet<menu_level1> menu_sorted = new TreeSet<>(comparator);
-        for (menu_level1 menu: items) menu_sorted.add(menu);
+        Comparator<menuLevel1> comparator = Comparator.comparing(menuLevel1::getPlacement);
+        TreeSet<menuLevel1> menu_sorted = new TreeSet<>(comparator);
+        for (menuLevel1 menu: items) menu_sorted.add(menu);
         return menu_sorted;
 
     }
 
-    public void setItems(Set<menu_level1> item) {
+    public void setItems(Set<menuLevel1> item) {
         this.items = item;
     }
 

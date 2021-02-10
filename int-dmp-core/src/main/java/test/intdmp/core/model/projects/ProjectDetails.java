@@ -1,6 +1,7 @@
-package test.intdmp.core.model;
+package test.intdmp.core.model.projects;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import test.intdmp.core.model.projects.Project;
 
 import javax.persistence.*;
 import java.io.Serializable;

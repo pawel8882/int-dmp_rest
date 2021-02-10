@@ -11,12 +11,12 @@ INSERT INTO Project (name, complete, number) VALUES
     (3,'z nadzieniem czekoladowym'),
     (4,'zawijany w super rulon makowy');
 
-     INSERT INTO Person (first_name, last_name, role) VALUES
-        ('Maciek', 'z klanu','inżynier'),
-        ('Jeży', 'Jeżowski','Rysunki'),
-        ('Marian', 'Mediamarkt','Obliczenia'),
-        ('Zofia', 'Tak','Manager'),
-        ('Ryszard', 'z na dobre i na złe','Pasterz');
+     INSERT INTO Person (first_name, last_name, role, username) VALUES
+        ('Jan', 'Jan','inżynier', 'janko'),
+        ('Jeży', 'Jeżowski','Rysunki' , 'leszcz'),
+        ('Marian', 'Mediamarkt','Obliczenia' , 'krauzer'),
+        ('Zofia', 'Tak','Manager', 'baba'),
+        ('Ryszard', 'z na dobre i na złe','Pasterz' , 'babsko');
 
   INSERT INTO persons_projects (project_id, person_id, adding_date) VALUES
 
@@ -27,6 +27,7 @@ INSERT INTO Project (name, complete, number) VALUES
   (2, 4, 'mały jeż'),
   (3, 4, 'lubieje'),
   (1, 5, 'przedwczoraj'),
+  (2, 5, 'przed'),
   (4, 3, 'za dwa dni');
 
    INSERT INTO department (project_id, name, description) VALUES
@@ -75,7 +76,32 @@ INSERT INTO menu_level2 (menu_level1_id, label, icon, placement) VALUES
 (1,'Folder', 'pi pi-fw pi-user-plus', 1),
 (1,'Plik', 'pi pi-fw pi-filter', 2);
 
-INSERT INTO header (title, concerns) VALUES
 
-('Folder', 'test1'),
-('Plik', 'test2');
+INSERT INTO Header (timestamp, title, concerns) VALUES
+
+    ('2019-12-12 01:02:03.123', 'Rygle', 'test'),
+    ('2012-12-12 01:02:03.123', 'Płatwie', 'test3'),
+    ('2015-12-12 01:02:03.123', 'Fundmaenty', 'test5'),
+    ('2017-12-12 01:02:03.123', 'Silos', 'test7'),
+    ('2011-12-12 01:02:03.123', 'Ogródek', 'test7'),
+    ('2020-12-12 01:02:03.123', 'Reklamy', 'test7');
+
+INSERT INTO Data_Messages (project_id, person_id, header_id, type) VALUES
+
+  (1, 3, 1, 'A'),
+  (1, 4, 2, 'A'),
+  (1, 2, 3, 'B'),
+  (1, 2, 4, 'A'),
+  (1, 1, 5, 'B'),
+  (1, 1, 6, 'B');
+
+INSERT INTO Received_Messages (person_id, data_messages_id, was_opened) VALUES
+
+  (1, 1, true),
+  (1, 2, true),
+  (1, 3, true),
+  (2, 4, true),
+  (2, 6, true),
+  (3, 5, true);
+
+

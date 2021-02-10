@@ -1,16 +1,11 @@
-package test.intdmp.core.model;
+package test.intdmp.core.model.projects;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
-public class persons_projects {
+public class PersonsProjects {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

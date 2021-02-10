@@ -1,16 +1,14 @@
-package test.intdmp.core.model;
+package test.intdmp.core.model.projects;
 
 import com.fasterxml.jackson.annotation.*;
-import test.intdmp.core.model.department;
-import test.intdmp.core.model.department_objects.menu;
-import test.intdmp.core.model.department_objects.menu_level1;
+import test.intdmp.core.model.department.objects.menu;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
 
 @Entity
-public class department implements Serializable {
+public class Department implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +22,7 @@ public class department implements Serializable {
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<menu> menu;
+    private Set<menu> menus;
 
     public Integer getId() {
         return id;
@@ -32,15 +30,15 @@ public class department implements Serializable {
 
     public TreeSet<menu> getMenu() {
 
-        Comparator<menu> comparator = Comparator.comparing(test.intdmp.core.model.department_objects.menu::getPlacement);
+        Comparator<menu> comparator = Comparator.comparing(menu::getPlacement);
         TreeSet<menu> menu_sorted = new TreeSet<>(comparator);
-        for (menu menu: menu) menu_sorted.add(menu);
+        for (menu menu: menus) menu_sorted.add(menu);
         return menu_sorted;
 
     }
 
     public void setItems(Set<menu> menu) {
-        this.menu = menu;
+        this.menus = menu;
     }
 
 }

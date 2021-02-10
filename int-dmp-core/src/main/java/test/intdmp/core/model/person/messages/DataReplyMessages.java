@@ -1,11 +1,8 @@
-package test.intdmp.core.model.person_messages;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import test.intdmp.core.model.Person;
+package test.intdmp.core.model.person.messages;
+import test.intdmp.core.model.projects.Person;
 import test.intdmp.core.model.messages.*;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 public class DataReplyMessages {

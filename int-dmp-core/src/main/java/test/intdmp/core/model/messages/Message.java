@@ -1,9 +1,7 @@
 package test.intdmp.core.model.messages;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import test.intdmp.core.model.persons_projects;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,16 +11,20 @@ import java.util.Set;
 
 @Entity
 public class Message implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
     public Timestamp timestamp;
-    public String content;
+    @Column(length = 5000000)
+    private String content;
 
+    @JsonManagedReference(value="reply")
     @OneToMany(mappedBy = "message")
     private Set<ReplyMessage> ReplyMessages = new HashSet<>();
 
-    @OneToOne
+    @JsonBackReference
+    @OneToOne(mappedBy = "message")
     private Header header;
 
     public Integer getId() {
@@ -45,9 +47,7 @@ public class Message implements Serializable {
 
     public void setContent(String content) { this.content = content; }
 
-    public Set<ReplyMessage> getReplyMessages() {
-        return ReplyMessages;
-    }
+    public Set<ReplyMessage> getReplyMessages() { return ReplyMessages; }
 
     public Header getHeader() {
         return header;

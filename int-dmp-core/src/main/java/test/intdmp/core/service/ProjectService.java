@@ -2,13 +2,13 @@ package test.intdmp.core.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import test.intdmp.core.model.Project;
-import test.intdmp.core.model.department;
+import test.intdmp.core.model.projects.Project;
+import test.intdmp.core.model.projects.Department;
+import test.intdmp.core.model.projects.Person;
+import test.intdmp.core.model.projects.PersonsProjects;
 
 import javax.persistence.EntityManager;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -20,13 +20,13 @@ public class ProjectService {
         this.entityManager = entityManager;
     }
 
-    public List<Project> getProjectList() {
-        return getAllProjects();
+    public List<Project> getProjectList(String user) {
+        return getUserProjects(user);
     }
 
     public Project getProject(Integer projectId) { return entityManager.find(Project.class, projectId); }
 
-    public List<department> getDepartmentsForProject(Integer projectId) { return departmentsForProject(projectId); }
+    public List<Department> getDepartmentsForProject(Integer projectId) { return departmentsForProject(projectId); }
 
     public Integer createProject(Project project) {
         project.getDetails().forEach(projectDetails -> projectDetails.setProject(project));
@@ -56,9 +56,21 @@ public class ProjectService {
        return entityManager.createQuery("SELECT a FROM Project a", Project.class).getResultList();
     }
 
-    public List<department> departmentsForProject(Integer projectId) {
+    public List<Project> getUserProjects(String user) {
 
-        return entityManager.createQuery("SELECT DISTINCT p FROM department p, IN(p.project) t WHERE t.id =: project_id order by p.name", department.class)
+
+        List<Project> projects = new ArrayList<>();
+        Person person = entityManager.createQuery("SELECT p FROM Person p WHERE p.username =: username", Person.class)
+        .setParameter("username", user).getSingleResult();
+        Set<PersonsProjects> PreProject = person.getProjects();
+        for (PersonsProjects p: PreProject)
+        {projects.add(p.getProject()); }
+        return projects;
+    }
+
+    public List<Department> departmentsForProject(Integer projectId) {
+
+        return entityManager.createQuery("SELECT DISTINCT p FROM Department p, IN(p.project) t WHERE t.id =: project_id order by p.name", Department.class)
                 .setParameter("project_id", projectId)
                 .getResultList();
 

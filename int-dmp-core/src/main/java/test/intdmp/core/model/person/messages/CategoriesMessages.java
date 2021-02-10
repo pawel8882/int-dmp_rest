@@ -1,12 +1,10 @@
-package test.intdmp.core.model.person_messages;
+package test.intdmp.core.model.person.messages;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import test.intdmp.core.model.Person;
-import test.intdmp.core.model.messages.Message;
+import test.intdmp.core.model.projects.Person;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 @Entity
 public class CategoriesMessages implements Serializable {

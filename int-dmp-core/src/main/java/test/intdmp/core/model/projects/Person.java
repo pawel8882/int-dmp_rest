@@ -1,9 +1,9 @@
-package test.intdmp.core.model;
+package test.intdmp.core.model.projects;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import test.intdmp.core.model.person_messages.*;
+import test.intdmp.core.model.person.messages.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,15 +18,21 @@ public class Person implements Serializable {
     public String firstName;
     public String lastName;
     public String role;
+    public String username;
 
     @OneToMany(mappedBy = "person")
-    private Set<persons_projects> persons_projects = new HashSet<>();
+    private Set<test.intdmp.core.model.projects.PersonsProjects> PersonsProjects = new HashSet<>();
     @OneToMany(mappedBy = "person")
     private Set<CategoriesMessages> categories = new HashSet<>();
     @OneToMany(mappedBy = "person")
     private Set<DataMessages> dataMessages = new HashSet<>();
+    @JsonManagedReference(value="replyPerson")
     @OneToMany(mappedBy = "person")
     private Set<DataReplyMessages> dataReplyMessages = new HashSet<>();
+    @OneToMany(mappedBy = "person")
+    private Set<ReceivedMessages> receivedMessages = new HashSet<>();
+    @OneToMany(mappedBy = "person")
+    private Set<InformationOnlyMessages> informationOnlyMessages = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -52,9 +58,13 @@ public class Person implements Serializable {
 
     public void setRole(String role) { this.role = role; }
 
+    public String getUserName() { return username;}
+
+    public void setUserName(String username) { this.username = username; }
+
     @JsonIgnoreProperties("person")
-    public Set<persons_projects> getProjects() {
-        return persons_projects;
+    public Set<PersonsProjects> getProjects() {
+        return PersonsProjects;
     }
 
     public Set<CategoriesMessages> getCategories() {
@@ -64,6 +74,27 @@ public class Person implements Serializable {
     public void setCategories(Set<CategoriesMessages> categories) {
         this.categories = categories;
     }
+
+    @JsonIgnore
+    public Set<DataMessages> getDataMessages() {
+        return dataMessages;
+    }
+
+    @JsonIgnore
+    public void setDataMessages(Set<DataMessages> dataMessage) {
+        this.dataMessages = dataMessage;
+    }
+
+    @JsonIgnore
+    public Set<ReceivedMessages> getReceivedMessages() {
+        return receivedMessages;
+    }
+
+    @JsonIgnore
+    public Set<InformationOnlyMessages> getInformationOnlyMessages() {
+        return informationOnlyMessages;
+    }
+
 
 
 }
