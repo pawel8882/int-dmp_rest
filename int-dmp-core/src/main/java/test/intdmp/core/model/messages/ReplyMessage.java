@@ -1,6 +1,9 @@
 package test.intdmp.core.model.messages;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import test.intdmp.core.helpClass.SuggestPerson;
 import test.intdmp.core.model.person.messages.DataReplyMessages;
 
 import javax.persistence.*;
@@ -15,15 +18,15 @@ public class ReplyMessage implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
     public Timestamp timestamp;
+    @Column(length = 5000000)
     public String content;
 
     @JsonBackReference(value="reply")
     @ManyToOne
     public Message message;
 
-    @JsonBackReference(value="personReply")
-    @OneToMany(mappedBy = "person")
-    private Set<DataReplyMessages> dataReplyMessages = new HashSet<>();
+    @OneToOne(mappedBy = "replyMessage", cascade = CascadeType.ALL)
+    private DataReplyMessages dataReplyMessages;
 
     public Integer getId() {
         return id;
@@ -45,8 +48,23 @@ public class ReplyMessage implements Serializable {
 
     public void setContent(String content) { this.content = content; }
 
+    @JsonIgnore
     public Message getMessage() {
         return message;
+    }
+    public void setMessage(Message message) { this.message = message; }
+
+    @JsonIgnoreProperties({"replyMessage", "dataMessages"})
+    public DataReplyMessages getDataReplyMessage() {
+        return dataReplyMessages;
+    }
+
+    public SuggestPerson getOwner() { return dataReplyMessages.getSuggestPerson(); }
+
+    public Set<SuggestPerson> getOwnerLikeSet() {
+        Set<SuggestPerson> persons = new HashSet<>();
+        persons.add(dataReplyMessages.getSuggestPerson());
+        return persons;
     }
 
 

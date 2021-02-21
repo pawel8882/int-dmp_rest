@@ -1,8 +1,10 @@
 package test.intdmp.core.model.messages;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import test.intdmp.core.model.person.messages.DataMessages;
+import test.intdmp.core.model.projects.Project;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -27,8 +29,8 @@ public class Header implements Serializable {
     @JoinColumn(name = "message_id")
     private Message message;
 
-    @OneToMany(mappedBy = "header")
-    private Set<DataMessages> dataMessages = new HashSet<>();
+    @OneToOne(mappedBy = "header")
+    private DataMessages dataMessage;
 
     public Integer getId() {
         return id;
@@ -61,8 +63,10 @@ public class Header implements Serializable {
     public Message getMessage() {
         return message;
     }
-
     public void setMessage(Message message) { this.message = message; }
+
+    @JsonIgnore
+    public DataMessages getDataMessages() { return dataMessage; }
 
     public String getDate() {
         return date;

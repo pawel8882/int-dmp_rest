@@ -26,7 +26,6 @@ public class Person implements Serializable {
     private Set<CategoriesMessages> categories = new HashSet<>();
     @OneToMany(mappedBy = "person")
     private Set<DataMessages> dataMessages = new HashSet<>();
-    @JsonManagedReference(value="replyPerson")
     @OneToMany(mappedBy = "person")
     private Set<DataReplyMessages> dataReplyMessages = new HashSet<>();
     @OneToMany(mappedBy = "person")
@@ -93,6 +92,11 @@ public class Person implements Serializable {
     @JsonIgnore
     public Set<InformationOnlyMessages> getInformationOnlyMessages() {
         return informationOnlyMessages;
+    }
+
+    @JsonIgnore
+    public Set<DataReplyMessages> getDataReplyMessages() {
+        return dataReplyMessages;
     }
 
 

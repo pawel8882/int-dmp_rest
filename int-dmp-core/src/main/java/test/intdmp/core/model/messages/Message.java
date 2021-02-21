@@ -1,13 +1,15 @@
 package test.intdmp.core.model.messages;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import test.intdmp.core.model.person.messages.DataMessages;
+import test.intdmp.core.model.projects.Project;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Message implements Serializable {
@@ -20,8 +22,10 @@ public class Message implements Serializable {
     private String content;
 
     @JsonManagedReference(value="reply")
-    @OneToMany(mappedBy = "message")
-    private Set<ReplyMessage> ReplyMessages = new HashSet<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL)
+    @OrderBy("timestamp DESC")
+    private List<ReplyMessage> ReplyMessages = new ArrayList<>();
 
     @JsonBackReference
     @OneToOne(mappedBy = "message")
@@ -39,15 +43,14 @@ public class Message implements Serializable {
         return timestamp;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
-    }
+    public void setTimestamp(Timestamp timestamp) { this.timestamp = timestamp; }
 
     public String getContent() { return content;}
 
     public void setContent(String content) { this.content = content; }
 
-    public Set<ReplyMessage> getReplyMessages() { return ReplyMessages; }
+    public List<ReplyMessage> getReplyMessages() { return ReplyMessages; }
+    public void addReplyMessage(ReplyMessage replyMessage) { ReplyMessages.add(replyMessage); }
 
     public Header getHeader() {
         return header;

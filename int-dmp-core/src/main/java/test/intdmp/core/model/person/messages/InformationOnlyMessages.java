@@ -3,6 +3,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import test.intdmp.core.model.projects.Person;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 public class InformationOnlyMessages {
@@ -19,12 +20,16 @@ public class InformationOnlyMessages {
     @JoinColumn(name = "data_messages_id")
     private DataMessages dataMessages;
 
+    @ManyToOne
+    @JoinColumn(name = "categories_messages_id")
+    private CategoriesMessages category;
+
     /* A = sentMessage, B = receivedMessage, C = InformationOnly */
     private Character type;
 
     private Boolean wasOpened;
 
-    private String category;
+    public Timestamp timestamp;
 
     public Integer getId() {
         return id;
@@ -42,7 +47,18 @@ public class InformationOnlyMessages {
     public Boolean getOpened() { return wasOpened; }
     public void setOpened(Boolean opened) { this.wasOpened = opened;  }
 
-    public String getCategory() { return category; }
+    public CategoriesMessages getCategory() { return category; }
+    public void SetCategoriesMessages(CategoriesMessages category) {this.category = category;}
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
+
 
 
 
