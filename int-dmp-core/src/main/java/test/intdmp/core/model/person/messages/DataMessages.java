@@ -38,15 +38,8 @@ public class DataMessages {
     @OneToMany(mappedBy = "dataMessages")
     private Set<DataReplyMessages> dataReplyMessages = new HashSet<>();
 
-    @ManyToOne
-    @JoinColumn(name = "categories_messages_id")
-    private CategoriesMessages category;
-
-    /* A = sentMessage, B = receivedMessage, C = InformationOnly */
-    private Character type;
-
-    private Boolean wasOpened;
-
+    @OneToMany(mappedBy = "dataMessages")
+    private Set<SentMessages> sentMessages = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -54,14 +47,6 @@ public class DataMessages {
 
     public Header getHeader() { return header; }
     public void setHeader(Header header) { this.header = header; }
-
-    public Character getType() { return type; }
-
-    public Boolean getOpened() { return wasOpened; }
-    public void setOpened(Boolean opened) { this.wasOpened = opened;  }
-
-    public CategoriesMessages getCategory() { return category; }
-    public void SetCategoriesMessages(CategoriesMessages category) {this.category = category;}
 
     public String getPersonName() { return person.getFirstName(); }
     public String getPersonLastName() { return person.getLastName(); }
@@ -86,9 +71,13 @@ public class DataMessages {
     public Set<InformationOnlyMessages> getInformationOnlyMessages() { return informationOnlyMessages; }
     public void setInformationOnlyMessages(Set<InformationOnlyMessages> informationOnlyMessages) { this.informationOnlyMessages = informationOnlyMessages; }
 
+    @JsonIgnore
+    public Set<SentMessages> getSentMessages() { return sentMessages; }
+    public void setSentMessages(Set<SentMessages> sentMessages) { this.sentMessages = sentMessages; }
 
 
-    public Set<SuggestPerson> getPersons() {
+
+    public Set<SuggestPerson> getPersonsDO() {
         Set<SuggestPerson> persons = new HashSet<>();
         this.receivedMessages.forEach(e -> {
             SuggestPerson person = new SuggestPerson(e.getPerson().getId(), e.getPerson().getFirstName() + " " + e.getPerson().getLastName());
@@ -158,13 +147,13 @@ public class DataMessages {
     @Transient
     public Timestamp TheNewestTimestampForOwnerThisMessage(Integer personId) {
         if (getHeader().getMessage().getReplyMessages().isEmpty()) {
-            return this.getHeader().getTimestamp();
+            return this.getHeader().getMessage().getTimestamp();
         }
             if (getHeader().getMessage().getReplyMessages().stream().filter(e -> e.getOwner().id == personId).findFirst().isPresent()) {
                 return getHeader().getMessage().getReplyMessages().stream().filter(e -> e.getOwner().id == personId).max(Comparator.comparing(ReplyMessage::getTimestamp))
                         .get().getTimestamp();
             }
             else
-                return this.getHeader().getTimestamp();
+                return this.getHeader().getMessage().getTimestamp();
         }
     }

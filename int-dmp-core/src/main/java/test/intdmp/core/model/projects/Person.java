@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Person implements Serializable {
@@ -32,6 +33,14 @@ public class Person implements Serializable {
     private Set<ReceivedMessages> receivedMessages = new HashSet<>();
     @OneToMany(mappedBy = "person")
     private Set<InformationOnlyMessages> informationOnlyMessages = new HashSet<>();
+    @OneToMany(mappedBy = "person")
+    private Set<SentMessages> sentMessages= new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "section_departments_persons",
+            joinColumns = @JoinColumn(name = "person_id"),
+            inverseJoinColumns = @JoinColumn(name = "section_department_id"))
+    private Set<SectionDepartments> sectionDepartments;
 
     public Integer getId() {
         return id;
@@ -66,6 +75,7 @@ public class Person implements Serializable {
         return PersonsProjects;
     }
 
+    @JsonIgnore
     public Set<CategoriesMessages> getCategories() {
         return categories;
     }
@@ -88,16 +98,33 @@ public class Person implements Serializable {
     public Set<ReceivedMessages> getReceivedMessages() {
         return receivedMessages;
     }
+    @JsonIgnore
+    public Set<ReceivedMessages> getPinnedReceivedMessages() { return receivedMessages.stream().filter(e -> e.getInfo().getPinned().equals(true)).collect(Collectors.toSet()); }
+
 
     @JsonIgnore
     public Set<InformationOnlyMessages> getInformationOnlyMessages() {
         return informationOnlyMessages;
     }
+    @JsonIgnore
+    public Set<InformationOnlyMessages> getPinnedInformationOnlyMessages() { return informationOnlyMessages.stream().filter(e -> e.getInfo().getPinned().equals(true)).collect(Collectors.toSet()); }
 
     @JsonIgnore
     public Set<DataReplyMessages> getDataReplyMessages() {
         return dataReplyMessages;
     }
+
+    @JsonIgnore
+    public Set<SentMessages> getSentMessages() { return sentMessages; }
+    @JsonIgnore
+    public Set<SentMessages> getPinnedSentMessages() { return sentMessages.stream().filter(e -> e.getInfo().getPinned().equals(true)).collect(Collectors.toSet()); }
+    public void setSentMessages(Set<SentMessages> sentMessages) { this.sentMessages = sentMessages; }
+
+    @JsonIgnore
+    public Set<SectionDepartments> getSectionDepartments() {
+        return sectionDepartments;
+    }
+    public void setSectionDepartments(Set<SectionDepartments> sectionDepartments) { this.sectionDepartments = sectionDepartments; }
 
 
 

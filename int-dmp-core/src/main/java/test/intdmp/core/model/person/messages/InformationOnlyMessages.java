@@ -24,6 +24,10 @@ public class InformationOnlyMessages {
     @JoinColumn(name = "categories_messages_id")
     private CategoriesMessages category;
 
+    @OneToOne
+    @JoinColumn(name = "info_message_id")
+    private InfoAboutMessages info;
+
     /* A = sentMessage, B = receivedMessage, C = InformationOnly */
     private Character type;
 
@@ -43,12 +47,13 @@ public class InformationOnlyMessages {
     public void setPerson(Person person) { this.person = person; }
 
     public Character getType() { return type; }
+    public void setType() {  this.type = 'C'; }
 
     public Boolean getOpened() { return wasOpened; }
     public void setOpened(Boolean opened) { this.wasOpened = opened;  }
 
     public CategoriesMessages getCategory() { return category; }
-    public void SetCategoriesMessages(CategoriesMessages category) {this.category = category;}
+    public void setCategoriesMessages(CategoriesMessages category) {this.category = category;}
 
     public Timestamp getTimestamp() {
         return timestamp;
@@ -57,6 +62,10 @@ public class InformationOnlyMessages {
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
+
+    @JsonIgnore
+    public InfoAboutMessages getInfo() { return info; }
+    public void setInfo(InfoAboutMessages info) { this.info= info; }
 
 
 

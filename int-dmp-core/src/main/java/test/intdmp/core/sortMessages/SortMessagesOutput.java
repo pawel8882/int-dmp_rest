@@ -5,6 +5,7 @@ import test.intdmp.core.model.person.messages.CategoriesMessages;
 import test.intdmp.core.model.person.messages.DataMessages;
 import test.intdmp.core.model.person.messages.InformationOnlyMessages;
 import test.intdmp.core.model.person.messages.ReceivedMessages;
+import test.intdmp.core.model.person.messages.SentMessages;
 import test.intdmp.core.model.projects.PersonsProjects;
 import test.intdmp.core.service.MessagesService;
 
@@ -24,33 +25,25 @@ public class SortMessagesOutput  {
         receivedMessages.forEach(e -> {
             if (e.getDataMessages().getHeader().getMessage().getReplyMessages().stream().filter(u -> u.getOwner().id != personId).findFirst().isPresent()) {
                 ReplyMessage replyMessage = e.getDataMessages().getPersonReplyMessageTheNewest(personId);
-                ToSorted.add(new DisplayMessages(e.getDataMessages().getId(), replyMessage.getOwnerLikeSet(), e.getDataMessages().getHeader().getTitle(), replyMessage.getTimestamp(), e.getCategory(), e.getOpened()));
+                ToSorted.add(new DisplayMessages(e.getDataMessages().getId(), replyMessage.getOwnerLikeSet(), e.getDataMessages().getHeader().getTitle(), replyMessage.getTimestamp(), e.getCategory(), e.getOpened(), e.getType(), e.getId(), e.getInfo().getPinned()));
             } else {
-                ToSorted.add(new DisplayMessages(e.getDataMessages().getId(), e.getDataMessages().getPersonLikeSuggestPersonTheNewest(personId), e.getDataMessages().getHeader().getTitle(), e.getTimestamp(), e.getCategory(), e.getOpened()));
+                ToSorted.add(new DisplayMessages(e.getDataMessages().getId(), e.getDataMessages().getPersonLikeSuggestPersonTheNewest(personId), e.getDataMessages().getHeader().getTitle(), e.getTimestamp(), e.getCategory(), e.getOpened(), e.getType(), e.getId(), e.getInfo().getPinned()));
 
             }
 
         });
         informationMessages.forEach(e -> {
-            ToSorted.add(new DisplayMessages(e.getDataMessages().getId(), e.getDataMessages().getPersonLikeSuggestPersonTheNewest(personId), e.getDataMessages().getHeader().getTitle(), e.getTimestamp(), e.getCategory(), e.getOpened()));
+            ToSorted.add(new DisplayMessages(e.getDataMessages().getId(), e.getDataMessages().getPersonLikeSuggestPersonTheNewest(personId), e.getDataMessages().getHeader().getTitle(), e.getTimestamp(), e.getCategory(), e.getOpened(), e.getType(), e.getId(), e.getInfo().getPinned()));
         });
         ToSorted.sort(Comparator.comparing((DisplayMessages e) -> e.timestamp).reversed());
         return PaginatorSort(paginator, ToSorted);
     }
 
-    public ParamDisplayMessages GetSortedSent(PaginatorFilter paginator, Set<DataMessages> dataMessages, Set<ReceivedMessages> replyMessages, Integer projectId, Integer personId) {
+    public ParamDisplayMessages GetSortedSent(PaginatorFilter paginator, Set<SentMessages> sentMessages, Integer projectId, Integer personId) {
         List<DisplayMessages> ToSorted = new ArrayList<>();
-        dataMessages.removeIf(e -> (e.getProject().getId() != projectId));
-        replyMessages.removeIf(e -> (e.getDataMessages().getProject().getId() != projectId));
-        replyMessages.removeIf(e -> (e.getDataMessages().getPerson().getId() == e.getPerson().getId()));
-        dataMessages.forEach(e -> {
-            ToSorted.add(new DisplayMessages(e.getId(), e.getPersonsWithoutCurrentUser(personId), e.getHeader().getTitle(), e.TheNewestTimestampForOwnerThisMessage(personId), e.getCategory(), e.getOpened()));
-        });
-        replyMessages.forEach(e -> {
-            if (e.getDataMessages().getHeader().getMessage().getReplyMessages().stream().filter(u -> u.getOwner().id == personId).findFirst().isPresent()) {
-                ReplyMessage replyMessage = e.getDataMessages().getPersonLikeSuggestPersonTheNewestSent(personId);
-                ToSorted.add(new DisplayMessages(e.getDataMessages().getId(), e.getDataMessages().getPersonsWithoutCurrentUser(personId), e.getDataMessages().getHeader().getTitle(), replyMessage.getTimestamp(), e.getCategory(), replyMessage.getDataReplyMessage().getUpdate()));
-            }
+        sentMessages.removeIf(e -> (e.getDataMessages().getProject().getId() != projectId));
+        sentMessages.forEach(e -> {
+            ToSorted.add(new DisplayMessages(e.getDataMessages().getId(), e.getDataMessages().getPersonsWithoutCurrentUser(personId), e.getDataMessages().getHeader().getTitle(), e.getTimestamp(), e.getCategory(), e.getOpened(), e.getType(), e.getId(), e.getInfo().getPinned()));
         });
         ToSorted.sort(Comparator.comparing((DisplayMessages e) -> e.timestamp).reversed());
         return PaginatorSort(paginator, ToSorted);

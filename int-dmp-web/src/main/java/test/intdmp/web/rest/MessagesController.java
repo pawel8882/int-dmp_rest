@@ -25,9 +25,19 @@ public class MessagesController {
         return messagesService.getReceivedMessages(projectId, user, paginator);
     }
 
+    @RequestMapping(value = "/{projectId}/receivedpinned", method = RequestMethod.POST)
+    public ParamDisplayMessages getReceivedPinnedMessages(@RequestBody PaginatorFilter paginator, @PathVariable("projectId") Integer projectId, @RequestParam("user") String user) {
+        return messagesService.getReceivedPinnedMessages(projectId, user, paginator);
+    }
+
     @RequestMapping(value = "/{projectId}/sent", method = RequestMethod.POST)
     public ParamDisplayMessages getSentMessages(@RequestBody PaginatorFilter paginator, @PathVariable("projectId") Integer projectId, @RequestParam("user") String user) {
         return messagesService.getSentMessages(projectId, user, paginator);
+    }
+
+    @RequestMapping(value = "/{projectId}/sentpinned", method = RequestMethod.POST)
+    public ParamDisplayMessages getSentPinnedMessages(@RequestBody PaginatorFilter paginator, @PathVariable("projectId") Integer projectId, @RequestParam("user") String user) {
+        return messagesService.getSentPinnedMessages(projectId, user, paginator);
     }
 
     @RequestMapping(value = "/{projectId}/users", method = RequestMethod.GET)
@@ -41,18 +51,23 @@ public class MessagesController {
     }
 
     @RequestMapping(value = "/detailedMessage/{messageId}", method = RequestMethod.GET)
-    public DetailedMessage detailedMessage(@PathVariable("messageId") Integer messageId, @RequestParam("user") String user) {
-        return  messagesService.getDetailedMessage(messageId, user);
+    public DetailedMessage detailedMessage(@PathVariable("messageId") Integer messageId, @RequestParam("user") String user, @RequestParam("id") Integer id, @RequestParam("char") Character character) {
+        return  messagesService.getDetailedMessage(messageId, user, id, character);
     }
 
     @RequestMapping(value = "/detailedMessage/{messageId}", method = RequestMethod.POST)
-    public Integer setReplyMessage(@RequestBody NewMessage newMessage, @PathVariable("messageId") Integer messageId, @RequestParam("user") String user) {
-        return  messagesService.setReplyMessage(messageId, user, newMessage);
+    public Integer setReplyMessage(@RequestBody NewMessage newMessage, @PathVariable("messageId") Integer messageId, @RequestParam("user") String user, @RequestParam("id") Integer id, @RequestParam("char") Character character) {
+        return  messagesService.setReplyMessage(messageId, user, newMessage, id, character);
     }
 
     @RequestMapping(value = "/categories", method = RequestMethod.GET)
     public List<CategoriesMessages> getUserCategories(@RequestParam("user") String user) {
         return  messagesService.getUserCategories(user);
+    }
+
+    @RequestMapping(value = "/detailedMessage/{messageId}", method = RequestMethod.PATCH)
+    public Boolean setOrUnsetPinned(@RequestBody UpdateMessage updateMessage, @PathVariable("messageId") Integer messageId, @RequestParam("user") String user) {
+        return  messagesService.changePinned(updateMessage, messageId, user);
     }
 
 }

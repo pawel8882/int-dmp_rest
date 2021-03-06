@@ -11,13 +11,19 @@ public class DetailedMessage {
     public SuggestPerson owner;
     public List<SuggestPerson> toPersons;
     public List<SuggestPerson> dwPersons;
+    public Character type;
+    public Integer id;
+    public Boolean pinned;
 
-    public DetailedMessage(String header, Message message, SuggestPerson owner, List<SuggestPerson> toPersons, List<SuggestPerson> dwPersons) {
+    public DetailedMessage(String header, Message message, SuggestPerson owner, List<SuggestPerson> toPersons, List<SuggestPerson> dwPersons, Character type, Integer id, Boolean pinned) {
         this.header = header;
         this.message = message;
         this.owner = owner;
         this.toPersons= toPersons;
         this.dwPersons= dwPersons;
+        this.type = type;
+        this.id = id;
+        this.pinned = pinned;
 
     }
 

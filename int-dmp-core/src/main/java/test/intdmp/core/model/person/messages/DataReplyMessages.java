@@ -27,13 +27,8 @@ public class DataReplyMessages {
     @JoinColumn(name = "data_messages_id")
     private DataMessages dataMessages;
 
-    private Boolean update;
-
     public ReplyMessage getReplyMessage() { return replyMessage; }
     public void setReplyMessage(ReplyMessage replyMessage) { this.replyMessage = replyMessage; }
-
-    public Boolean getUpdate() { return update; }
-    public void setUpdate(Boolean update) { this.update = update; }
 
     @JsonIgnore
     public Person getPerson() { return person; }

@@ -2,7 +2,8 @@ package test.intdmp.web.rest;
 
 import org.springframework.web.bind.annotation.*;
 import test.intdmp.core.model.projects.Project;
-import test.intdmp.core.model.projects.Department;
+import test.intdmp.core.model.departmentsOnWork.Department;
+import test.intdmp.core.model.projects.SectionDepartments;
 import test.intdmp.core.service.ProjectService;
 
 import java.util.List;
@@ -28,8 +29,8 @@ public class ProjectsController {
     }
 
     @RequestMapping(value = "/{projectId}/departments", method = RequestMethod.GET)
-    public List<Department> getDepartmentsForProject(@PathVariable("projectId") Integer projectId) {
-        return projectService.getDepartmentsForProject(projectId);
+    public List<SectionDepartments> getDepartmentsForProject(@PathVariable("projectId") Integer projectId, @RequestParam("user") String user) {
+        return projectService.getDepartmentsForProject(projectId, user);
     }
 
     @RequestMapping(method = RequestMethod.POST)

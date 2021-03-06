@@ -3,12 +3,14 @@ package test.intdmp.core.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import test.intdmp.core.model.projects.Project;
-import test.intdmp.core.model.projects.Department;
+import test.intdmp.core.model.departmentsOnWork.Department;
 import test.intdmp.core.model.projects.Person;
 import test.intdmp.core.model.projects.PersonsProjects;
+import test.intdmp.core.model.projects.SectionDepartments;
 
 import javax.persistence.EntityManager;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -26,7 +28,7 @@ public class ProjectService {
 
     public Project getProject(Integer projectId) { return entityManager.find(Project.class, projectId); }
 
-    public List<Department> getDepartmentsForProject(Integer projectId) { return departmentsForProject(projectId); }
+    public List<SectionDepartments> getDepartmentsForProject(Integer projectId, String user) { return userDepartments(projectId, user); }
 
     public Integer createProject(Project project) {
         project.getDetails().forEach(projectDetails -> projectDetails.setProject(project));
@@ -68,11 +70,16 @@ public class ProjectService {
         return projects;
     }
 
-    public List<Department> departmentsForProject(Integer projectId) {
 
-        return entityManager.createQuery("SELECT DISTINCT p FROM Department p, IN(p.project) t WHERE t.id =: project_id order by p.name", Department.class)
-                .setParameter("project_id", projectId)
-                .getResultList();
+    public List<SectionDepartments> userDepartments(Integer projectId, String user) {
+
+        Set<SectionDepartments> sectionDepartments = entityManager.createQuery("SELECT p FROM Person p WHERE p.username =: username", Person.class)
+                .setParameter("username", user).getSingleResult().getSectionDepartments()
+                .stream().filter(e -> e.getProject().getId().equals(projectId)).collect(Collectors.toSet());
+        List<SectionDepartments> sectionDepartmentsAlphabetical = new ArrayList<>(sectionDepartments);
+        sectionDepartmentsAlphabetical.sort(Comparator.comparing(SectionDepartments::getSection));
+
+        return sectionDepartmentsAlphabetical;
 
     }
 

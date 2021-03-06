@@ -1,6 +1,7 @@
 package test.intdmp.core.model.projects;
 
 import com.fasterxml.jackson.annotation.*;
+import test.intdmp.core.model.departmentsOnWork.Department;
 import test.intdmp.core.model.person.messages.DataMessages;
 
 import javax.persistence.*;
@@ -25,7 +26,7 @@ public class Project implements Serializable {
     private Set<test.intdmp.core.model.projects.PersonsProjects> PersonsProjects = new HashSet<>();
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Department> departments = new HashSet<>();
+    private Set<SectionDepartments> sectionsDepartments = new HashSet<>();
 
     @OneToMany(mappedBy = "project")
     private Set<DataMessages> dataMessages = new HashSet<>();
@@ -85,12 +86,5 @@ public class Project implements Serializable {
         return PersonsProjects;
     }
 
-    public Set<Integer> getDepartmentId() {
-
-        Set<Integer> departments_id = new HashSet<>();
-        for (Department dp : departments) { departments_id.add(dp.getId());  }
-        return departments_id;
-
-    }
 
 }

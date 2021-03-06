@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class ReceivedMessages {
+public class SentMessages {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,7 +50,7 @@ public class ReceivedMessages {
     public void setPerson(Person person) { this.person = person; }
 
     public Character getType() { return type; }
-    public void setType() {  this.type = 'B'; }
+    public void setType() {  this.type = 'A'; }
 
     public Boolean getOpened() { return wasOpened; }
     public void setOpened(Boolean opened) { this.wasOpened = opened;  }

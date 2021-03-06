@@ -19,8 +19,6 @@ public class Header implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id;
-    public Timestamp timestamp;
-    public String date;
     public String title;
     public String concerns;
 
@@ -40,17 +38,6 @@ public class Header implements Serializable {
         this.id = id;
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
-        Date date = new Date(timestamp.getTime());
-        SimpleDateFormat simple = new SimpleDateFormat("dd.MM.yyy HH:mm:ss");
-        this.date = simple.format(date);
-    }
-
     public String getTitle() { return title;}
 
     public void setTitle(String title) { this.title = title; }
@@ -67,10 +54,6 @@ public class Header implements Serializable {
 
     @JsonIgnore
     public DataMessages getDataMessages() { return dataMessage; }
-
-    public String getDate() {
-        return date;
-    }
 
 
 }
