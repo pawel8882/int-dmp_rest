@@ -1,4 +1,4 @@
-package test.intdmp.core.helpClass;
+package test.intdmp.core.service.messages._class;
 
 import test.intdmp.core.model.person.messages.CategoriesMessages;
 

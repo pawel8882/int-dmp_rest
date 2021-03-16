@@ -1,12 +1,9 @@
 package test.intdmp.core.model.person.messages;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import test.intdmp.core.helpClass.SuggestPerson;
 import test.intdmp.core.model.projects.Person;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 public class SentMessages {

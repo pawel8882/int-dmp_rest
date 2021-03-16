@@ -7,6 +7,9 @@ import test.intdmp.core.model.departmentsOnWork.Department;
 import test.intdmp.core.model.projects.Person;
 import test.intdmp.core.model.projects.PersonsProjects;
 import test.intdmp.core.model.projects.SectionDepartments;
+import test.intdmp.core.service.project.GetProjects;
+import test.intdmp.core.service.project.ModifyProjects;
+import test.intdmp.core.service.project.SetProjects;
 
 import javax.persistence.EntityManager;
 import java.util.*;
@@ -16,71 +19,39 @@ import java.util.stream.Collectors;
 @Transactional
 public class ProjectService {
 
-    private EntityManager entityManager;
+    private GetProjects getProjects;
+    private SetProjects setProjects;
+    private ModifyProjects modifyProjects;
 
-    public ProjectService(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    public ProjectService(GetProjects getProjects, SetProjects setProjects, ModifyProjects modifyProjects) {
+        this.getProjects = getProjects;
+        this.setProjects = setProjects;
+        this.modifyProjects = modifyProjects;
     }
 
     public List<Project> getProjectList(String user) {
-        return getUserProjects(user);
+        List<Project> projectList = getProjects.getUserProjects(user);
+        return projectList;
     }
 
-    public Project getProject(Integer projectId) { return entityManager.find(Project.class, projectId); }
+    public Project getProject(Integer projectId) {
+        return getProjects.getOneProject(projectId);
+    }
 
-    public List<SectionDepartments> getDepartmentsForProject(Integer projectId, String user) { return userDepartments(projectId, user); }
+    public List<SectionDepartments> getDepartmentsForProject(Integer projectId, String user) {
+        return getProjects.userDepartments(projectId, user);
+    }
 
     public Integer createProject(Project project) {
-        project.getDetails().forEach(projectDetails -> projectDetails.setProject(project));
-        entityManager.persist(project);
-        return project.getId();
+        return setProjects.createProject(project);
     }
 
     public void updateProject(Integer projectId, Project project) {
-
-        Project toUpdate = entityManager.find(Project.class, projectId);
-        toUpdate.setName(project.getName());
-        toUpdate.setComplete(project.isComplete());
-        toUpdate.setNumber(project.getNumber());
-        entityManager.merge(toUpdate);
-
-
+        modifyProjects.updateProject(projectId, project);
     }
 
     public void removeProject(Integer projectId) {
-
-        entityManager.remove(entityManager.find(Project.class, projectId));
-
-    }
-
-    public List<Project> getAllProjects() {
-
-       return entityManager.createQuery("SELECT a FROM Project a", Project.class).getResultList();
-    }
-
-    public List<Project> getUserProjects(String user) {
-
-
-        List<Project> projects = new ArrayList<>();
-        Person person = entityManager.createQuery("SELECT p FROM Person p WHERE p.username =: username", Person.class)
-        .setParameter("username", user).getSingleResult();
-        Set<PersonsProjects> PreProject = person.getProjects();
-        for (PersonsProjects p: PreProject)
-        {projects.add(p.getProject()); }
-        return projects;
-    }
-
-
-    public List<SectionDepartments> userDepartments(Integer projectId, String user) {
-
-        Set<SectionDepartments> sectionDepartments = entityManager.createQuery("SELECT p FROM Person p WHERE p.username =: username", Person.class)
-                .setParameter("username", user).getSingleResult().getSectionDepartments()
-                .stream().filter(e -> e.getProject().getId().equals(projectId)).collect(Collectors.toSet());
-        List<SectionDepartments> sectionDepartmentsAlphabetical = new ArrayList<>(sectionDepartments);
-        sectionDepartmentsAlphabetical.sort(Comparator.comparing(SectionDepartments::getSection));
-
-        return sectionDepartmentsAlphabetical;
-
+        modifyProjects.removeProject(projectId);
     }
 
 }

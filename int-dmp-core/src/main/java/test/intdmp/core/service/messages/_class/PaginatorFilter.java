@@ -1,5 +1,5 @@
-package test.intdmp.core.sortMessages;
-import test.intdmp.core.helpClass.*;
+package test.intdmp.core.service.messages._class;
+import test.intdmp.core.service.messages._class.Category;
 
 import java.util.List;
 

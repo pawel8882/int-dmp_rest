@@ -1,4 +1,4 @@
-package test.intdmp.core.sortMessages;
+package test.intdmp.core.service.messages._class;
 
 import java.util.List;
 

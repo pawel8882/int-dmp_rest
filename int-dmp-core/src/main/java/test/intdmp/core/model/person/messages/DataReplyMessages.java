@@ -1,10 +1,8 @@
 package test.intdmp.core.model.person.messages;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import test.intdmp.core.helpClass.SuggestPerson;
+import test.intdmp.core.service.messages._class.SuggestPerson;
 import test.intdmp.core.model.projects.Person;
 import test.intdmp.core.model.messages.*;
-import test.intdmp.core.model.projects.Project;
 
 import javax.persistence.*;
 

@@ -3,7 +3,7 @@ package test.intdmp.core.model.messages;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import test.intdmp.core.helpClass.SuggestPerson;
+import test.intdmp.core.service.messages._class.SuggestPerson;
 import test.intdmp.core.model.person.messages.DataReplyMessages;
 
 import javax.persistence.*;

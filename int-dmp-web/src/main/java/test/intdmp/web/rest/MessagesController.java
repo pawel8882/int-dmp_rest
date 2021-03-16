@@ -1,12 +1,9 @@
 package test.intdmp.web.rest;
 
 import org.springframework.web.bind.annotation.*;
-import test.intdmp.core.helpClass.*;
 import test.intdmp.core.model.person.messages.CategoriesMessages;
-import test.intdmp.core.model.person.messages.DataMessages;
-import test.intdmp.core.model.person.messages.ReceivedMessages;
 import test.intdmp.core.service.MessagesService;
-import test.intdmp.core.sortMessages.PaginatorFilter;
+import test.intdmp.core.service.messages._class.*;
 
 import java.util.List;
 
@@ -21,22 +18,22 @@ public class MessagesController {
     }
 
     @RequestMapping(value = "/{projectId}/received", method = RequestMethod.POST)
-    public ParamDisplayMessages getReceivedMessages(@RequestBody PaginatorFilter paginator, @PathVariable("projectId") Integer projectId, @RequestParam("user") String user) {
+    public NumberAndListDisplayMessages getReceivedMessages(@RequestBody PaginatorFilter paginator, @PathVariable("projectId") Integer projectId, @RequestParam("user") String user) {
         return messagesService.getReceivedMessages(projectId, user, paginator);
     }
 
     @RequestMapping(value = "/{projectId}/receivedpinned", method = RequestMethod.POST)
-    public ParamDisplayMessages getReceivedPinnedMessages(@RequestBody PaginatorFilter paginator, @PathVariable("projectId") Integer projectId, @RequestParam("user") String user) {
+    public NumberAndListDisplayMessages getReceivedPinnedMessages(@RequestBody PaginatorFilter paginator, @PathVariable("projectId") Integer projectId, @RequestParam("user") String user) {
         return messagesService.getReceivedPinnedMessages(projectId, user, paginator);
     }
 
     @RequestMapping(value = "/{projectId}/sent", method = RequestMethod.POST)
-    public ParamDisplayMessages getSentMessages(@RequestBody PaginatorFilter paginator, @PathVariable("projectId") Integer projectId, @RequestParam("user") String user) {
+    public NumberAndListDisplayMessages getSentMessages(@RequestBody PaginatorFilter paginator, @PathVariable("projectId") Integer projectId, @RequestParam("user") String user) {
         return messagesService.getSentMessages(projectId, user, paginator);
     }
 
     @RequestMapping(value = "/{projectId}/sentpinned", method = RequestMethod.POST)
-    public ParamDisplayMessages getSentPinnedMessages(@RequestBody PaginatorFilter paginator, @PathVariable("projectId") Integer projectId, @RequestParam("user") String user) {
+    public NumberAndListDisplayMessages getSentPinnedMessages(@RequestBody PaginatorFilter paginator, @PathVariable("projectId") Integer projectId, @RequestParam("user") String user) {
         return messagesService.getSentPinnedMessages(projectId, user, paginator);
     }
 
