@@ -27,6 +27,10 @@ public class InfoAboutMessages {
     public Boolean getPinned() { return pinned; }
     public void setPinned(Boolean pinned) {  this.pinned = pinned; }
 
+    public SentMessages getSentMessages() { return sentMessage; }
+    public ReceivedMessages getReceivedMessages() { return receivedMessage; }
+    public InformationOnlyMessages getInformationOnlyMessage() { return informationOnlyMessage; }
+
 
 
 

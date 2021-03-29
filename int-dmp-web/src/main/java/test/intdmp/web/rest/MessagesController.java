@@ -22,19 +22,14 @@ public class MessagesController {
         return messagesService.getReceivedMessages(projectId, user, paginator);
     }
 
-    @RequestMapping(value = "/{projectId}/receivedpinned", method = RequestMethod.POST)
-    public NumberAndListDisplayMessages getReceivedPinnedMessages(@RequestBody PaginatorFilter paginator, @PathVariable("projectId") Integer projectId, @RequestParam("user") String user) {
-        return messagesService.getReceivedPinnedMessages(projectId, user, paginator);
-    }
-
     @RequestMapping(value = "/{projectId}/sent", method = RequestMethod.POST)
     public NumberAndListDisplayMessages getSentMessages(@RequestBody PaginatorFilter paginator, @PathVariable("projectId") Integer projectId, @RequestParam("user") String user) {
         return messagesService.getSentMessages(projectId, user, paginator);
     }
 
-    @RequestMapping(value = "/{projectId}/sentpinned", method = RequestMethod.POST)
+    @RequestMapping(value = "/{projectId}/pinned", method = RequestMethod.POST)
     public NumberAndListDisplayMessages getSentPinnedMessages(@RequestBody PaginatorFilter paginator, @PathVariable("projectId") Integer projectId, @RequestParam("user") String user) {
-        return messagesService.getSentPinnedMessages(projectId, user, paginator);
+        return messagesService.getPinnedMessages(projectId, user, paginator);
     }
 
     @RequestMapping(value = "/{projectId}/users", method = RequestMethod.GET)

@@ -1,4 +1,5 @@
 package test.intdmp.core.service.messages;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import test.intdmp.core.model.messages.Message;
 import test.intdmp.core.model.person.messages.*;
@@ -15,7 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Service
+@Component
 public class GetMessages {
 
     private EntityManager entityManager;
@@ -48,23 +49,26 @@ public class GetMessages {
     }
 
 
-    public NumberAndListDisplayMessages getUserPinnedReceivedMessages(Integer projectId, String user, PaginatorFilter paginator) {
+    public NumberAndListDisplayMessages getUserPinnedMessages(Integer projectId, String user, PaginatorFilter paginator) {
         Person person = entityManager.createQuery("SELECT p FROM Person p WHERE p.username =: username", Person.class)
                 .setParameter("username", user).getSingleResult();
         if (!paginator.categories.isEmpty()) {
             Set<InformationOnlyMessages> informationOnlyMessages = new HashSet<>();
             Set<ReceivedMessages> messages = new HashSet<>();
+            Set<SentMessages> sentMessages = new HashSet<>();
             paginator.categories.forEach(e -> {
                         CategoriesMessages messagesFromCategory = entityManager.find(CategoriesMessages.class, e.id);
                         messages.addAll(messagesFromCategory.getPinnedReceivedMessages());
                         informationOnlyMessages.addAll(messagesFromCategory.getPinnedInformationOnlyMessages());
+                        sentMessages.addAll(messagesFromCategory.getPinnedSentMessages());
                     }
             );
-            return sortMessages.GetSortedReceived(paginator, messages, informationOnlyMessages, projectId, person.getId());
+            return sortMessages.GetSortedPinnedMessages(paginator, sentMessages, messages, informationOnlyMessages, projectId, person.getId());
         }
         Set<ReceivedMessages> messages = person.getPinnedReceivedMessages();
         Set<InformationOnlyMessages> informationOnlyMessages = person.getPinnedInformationOnlyMessages();
-        return sortMessages.GetSortedReceived(paginator, messages, informationOnlyMessages, projectId, person.getId());
+        Set<SentMessages> sentMessages = person.getPinnedSentMessages();
+        return sortMessages.GetSortedPinnedMessages(paginator, sentMessages, messages, informationOnlyMessages, projectId, person.getId());
     }
 
     public NumberAndListDisplayMessages getUserSentMessages(Integer projectId, String user, PaginatorFilter paginator) {
@@ -80,22 +84,6 @@ public class GetMessages {
             return sortMessages.GetSortedSent(paginator, messages, projectId, person.getId());
         }
         Set<SentMessages> messages = person.getSentMessages();
-        return sortMessages.GetSortedSent(paginator, messages, projectId, person.getId());
-    }
-
-    public NumberAndListDisplayMessages getUserPinnedSentMessages(Integer projectId, String user, PaginatorFilter paginator) {
-        Person person = entityManager.createQuery("SELECT p FROM Person p  WHERE p.username =: username", Person.class)
-                .setParameter("username", user).getSingleResult();
-        if (!paginator.categories.isEmpty()) {
-            Set<SentMessages> messages = new HashSet<>();
-            paginator.categories.forEach(e -> {
-                        CategoriesMessages messagesFromCategory = entityManager.find(CategoriesMessages.class, e.id);
-                        messages.addAll(messagesFromCategory.getPinnedSentMessages());
-                    }
-            );
-            return sortMessages.GetSortedSent(paginator, messages, projectId, person.getId());
-        }
-        Set<SentMessages> messages = person.getPinnedSentMessages();
         return sortMessages.GetSortedSent(paginator, messages, projectId, person.getId());
     }
 

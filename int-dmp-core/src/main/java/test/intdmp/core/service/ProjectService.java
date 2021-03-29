@@ -1,5 +1,8 @@
 package test.intdmp.core.service;
 
+import org.springframework.beans.factory.annotation.Autowire;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import test.intdmp.core.model.projects.Project;
@@ -19,15 +22,14 @@ import java.util.stream.Collectors;
 @Transactional
 public class ProjectService {
 
+    @Autowired
     private GetProjects getProjects;
+    @Autowired
     private SetProjects setProjects;
+    @Autowired
     private ModifyProjects modifyProjects;
 
-    public ProjectService(GetProjects getProjects, SetProjects setProjects, ModifyProjects modifyProjects) {
-        this.getProjects = getProjects;
-        this.setProjects = setProjects;
-        this.modifyProjects = modifyProjects;
-    }
+
 
     public List<Project> getProjectList(String user) {
         List<Project> projectList = getProjects.getUserProjects(user);

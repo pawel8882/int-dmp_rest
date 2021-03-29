@@ -39,16 +39,12 @@ public class MessagesService{
         return getMessages.getUserReceivedMessages(projectId, user, paginator);
     }
 
-    public NumberAndListDisplayMessages getReceivedPinnedMessages(Integer projectId, String user, PaginatorFilter paginator) {
-        return getMessages.getUserPinnedReceivedMessages(projectId, user, paginator);
-    }
-
     public NumberAndListDisplayMessages getSentMessages(Integer projectId, String user, PaginatorFilter paginator) {
         return getMessages.getUserSentMessages(projectId, user, paginator);
     }
 
-    public NumberAndListDisplayMessages getSentPinnedMessages(Integer projectId, String user, PaginatorFilter paginator) {
-        return getMessages.getUserPinnedSentMessages(projectId, user, paginator);
+    public NumberAndListDisplayMessages getPinnedMessages(Integer projectId, String user, PaginatorFilter paginator) {
+        return getMessages.getUserPinnedMessages(projectId, user, paginator);
     }
 
     public List<SuggestPerson> getSuggestUsers(Integer projectId, String user) {

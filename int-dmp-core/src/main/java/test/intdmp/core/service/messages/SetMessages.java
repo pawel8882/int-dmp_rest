@@ -1,5 +1,6 @@
 package test.intdmp.core.service.messages;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import test.intdmp.core.model.messages.Header;
 import test.intdmp.core.model.messages.Message;
@@ -17,7 +18,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-@Service
+@Component
 public class SetMessages {
 
     private EntityManager entityManager;

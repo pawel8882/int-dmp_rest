@@ -1,5 +1,7 @@
 package test.intdmp.core.service.project;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import test.intdmp.core.model.projects.Person;
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 public class GetProjects {
 
     private EntityManager entityManager;

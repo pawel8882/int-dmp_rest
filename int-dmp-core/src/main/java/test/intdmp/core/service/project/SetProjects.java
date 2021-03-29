@@ -1,11 +1,12 @@
 package test.intdmp.core.service.project;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import test.intdmp.core.model.projects.Project;
 
 import javax.persistence.EntityManager;
 
-@Service
+@Component
 public class SetProjects {
 
     private EntityManager entityManager;

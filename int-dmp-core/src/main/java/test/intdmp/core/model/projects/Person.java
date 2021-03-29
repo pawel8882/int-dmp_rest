@@ -107,7 +107,10 @@ public class Person implements Serializable {
         return informationOnlyMessages;
     }
     @JsonIgnore
-    public Set<InformationOnlyMessages> getPinnedInformationOnlyMessages() { return informationOnlyMessages.stream().filter(e -> e.getInfo().getPinned().equals(true)).collect(Collectors.toSet()); }
+    public Set<InformationOnlyMessages> getPinnedInformationOnlyMessages() { return informationOnlyMessages.stream()
+            .filter(e -> e.getInfo().getPinned().equals(true) && e.getInfo().getReceivedMessages() == null)
+            .collect(Collectors.toSet());
+    }
 
     @JsonIgnore
     public Set<DataReplyMessages> getDataReplyMessages() {
@@ -117,7 +120,9 @@ public class Person implements Serializable {
     @JsonIgnore
     public Set<SentMessages> getSentMessages() { return sentMessages; }
     @JsonIgnore
-    public Set<SentMessages> getPinnedSentMessages() { return sentMessages.stream().filter(e -> e.getInfo().getPinned().equals(true)).collect(Collectors.toSet()); }
+    public Set<SentMessages> getPinnedSentMessages() { return sentMessages.stream()
+            .filter(e -> e.getInfo().getPinned()
+                    .equals(true) && e.getInfo().getReceivedMessages() == null && e.getInfo().getInformationOnlyMessage() == null).collect(Collectors.toSet()); }
     public void setSentMessages(Set<SentMessages> sentMessages) { this.sentMessages = sentMessages; }
 
     @JsonIgnore
