@@ -86,5 +86,13 @@ public class Project implements Serializable {
         return PersonsProjects;
     }
 
+    public void addPersonsProjects(Set<PersonsProjects> personsProjects) {
+        this.PersonsProjects.addAll(personsProjects);
+    }
+
+    public void setOnePersonsProjects(PersonsProjects personsProjects) {
+        this.PersonsProjects.add(personsProjects);
+    }
+
 
 }

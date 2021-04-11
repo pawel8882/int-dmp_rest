@@ -1,7 +1,9 @@
 package test.intdmp.web.rest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import test.intdmp.core.model.person.messages.CategoriesMessages;
+import test.intdmp.core.model.person.messages._enum.MessageType;
 import test.intdmp.core.service.MessagesService;
 import test.intdmp.core.service.messages._class.*;
 
@@ -11,11 +13,8 @@ import java.util.List;
 @RequestMapping("/api/messages")
 public class MessagesController {
 
+    @Autowired
     private MessagesService messagesService;
-
-    MessagesController(MessagesService messagesService) {
-        this.messagesService = messagesService;
-    }
 
     @RequestMapping(value = "/{projectId}/received", method = RequestMethod.POST)
     public NumberAndListDisplayMessages getReceivedMessages(@RequestBody PaginatorFilter paginator, @PathVariable("projectId") Integer projectId, @RequestParam("user") String user) {
@@ -43,12 +42,12 @@ public class MessagesController {
     }
 
     @RequestMapping(value = "/detailedMessage/{messageId}", method = RequestMethod.GET)
-    public DetailedMessage detailedMessage(@PathVariable("messageId") Integer messageId, @RequestParam("user") String user, @RequestParam("id") Integer id, @RequestParam("char") Character character) {
-        return  messagesService.getDetailedMessage(messageId, user, id, character);
+    public DetailedMessage detailedMessage(@PathVariable("messageId") Integer messageId, @RequestParam("user") String user, @RequestParam("id") Integer id, @RequestParam("char") MessageType messageType) {
+        return  messagesService.getDetailedMessage(messageId, user, id, messageType);
     }
 
     @RequestMapping(value = "/detailedMessage/{messageId}", method = RequestMethod.POST)
-    public Integer setReplyMessage(@RequestBody NewMessage newMessage, @PathVariable("messageId") Integer messageId, @RequestParam("user") String user, @RequestParam("id") Integer id, @RequestParam("char") Character character) {
+    public Integer setReplyMessage(@RequestBody NewMessage newMessage, @PathVariable("messageId") Integer messageId, @RequestParam("user") String user, @RequestParam("id") Integer id, @RequestParam("char") MessageType character) {
         return  messagesService.setReplyMessage(messageId, user, newMessage, id, character);
     }
 

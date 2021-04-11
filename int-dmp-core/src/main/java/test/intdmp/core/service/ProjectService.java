@@ -1,51 +1,45 @@
 package test.intdmp.core.service;
 
-import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import test.intdmp.core.model.projects.Project;
-import test.intdmp.core.model.departmentsOnWork.Department;
 import test.intdmp.core.model.projects.Person;
-import test.intdmp.core.model.projects.PersonsProjects;
+import test.intdmp.core.model.projects.Project;
 import test.intdmp.core.model.projects.SectionDepartments;
-import test.intdmp.core.service.project.GetProjects;
+import test.intdmp.core.service.project.CollectProjects;
 import test.intdmp.core.service.project.ModifyProjects;
-import test.intdmp.core.service.project.SetProjects;
+import test.intdmp.core.service.project.AddProjects;
 
-import javax.persistence.EntityManager;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class ProjectService {
 
     @Autowired
-    private GetProjects getProjects;
+    private CollectProjects collectProjects;
     @Autowired
-    private SetProjects setProjects;
+    private AddProjects addProjects;
     @Autowired
     private ModifyProjects modifyProjects;
 
 
 
     public List<Project> getProjectList(String user) {
-        List<Project> projectList = getProjects.getUserProjects(user);
+        List<Project> projectList = collectProjects.getUserProjects(user);
         return projectList;
     }
 
     public Project getProject(Integer projectId) {
-        return getProjects.getOneProject(projectId);
+        return collectProjects.getOneProject(projectId);
     }
 
     public List<SectionDepartments> getDepartmentsForProject(Integer projectId, String user) {
-        return getProjects.userDepartments(projectId, user);
+        return collectProjects.userDepartments(projectId, user);
     }
 
-    public Integer createProject(Project project) {
-        return setProjects.createProject(project);
+    public Integer createProject(Project project, String user) {
+        return addProjects.createProject(project, user);
     }
 
     public void updateProject(Integer projectId, Project project) {

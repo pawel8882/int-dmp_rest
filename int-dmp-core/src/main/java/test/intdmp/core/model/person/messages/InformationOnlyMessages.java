@@ -1,6 +1,7 @@
 package test.intdmp.core.model.person.messages;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import test.intdmp.core.model.projects.Person;
+import test.intdmp.core.model.person.messages._enum.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -28,12 +29,15 @@ public class InformationOnlyMessages {
     @JoinColumn(name = "info_message_id")
     private InfoAboutMessages info;
 
-    /* A = sentMessage, B = receivedMessage, C = InformationOnly */
-    private Character type;
+    @Enumerated
+    @Column(name ="message_type")
+    private MessageType messageType;
 
     private Boolean wasOpened;
 
     public Timestamp timestamp;
+
+    public InformationOnlyMessages() {this.messageType = MessageType.INFORMATION;}
 
     public Integer getId() {
         return id;
@@ -46,8 +50,7 @@ public class InformationOnlyMessages {
     public Person getPerson() { return person; }
     public void setPerson(Person person) { this.person = person; }
 
-    public Character getType() { return type; }
-    public void setType() {  this.type = 'C'; }
+    public MessageType getType() { return messageType; }
 
     public Boolean getOpened() { return wasOpened; }
     public void setOpened(Boolean opened) { this.wasOpened = opened;  }

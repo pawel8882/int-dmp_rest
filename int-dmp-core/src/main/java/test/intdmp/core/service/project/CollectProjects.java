@@ -1,5 +1,6 @@
 package test.intdmp.core.service.project;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,8 @@ import test.intdmp.core.model.projects.PersonsProjects;
 import test.intdmp.core.model.projects.Project;
 import test.intdmp.core.model.projects.SectionDepartments;
 import test.intdmp.core.service.ProjectService;
+import test.intdmp.core.service.repository.PersonRepository;
+import test.intdmp.core.service.repository.ProjectRepository;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -18,38 +21,36 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class GetProjects {
+public class CollectProjects {
 
-    private EntityManager entityManager;
-
-    public GetProjects(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
+    @Autowired
+    private ProjectRepository projectRepository;
+    @Autowired
+    private PersonRepository personRepository;
 
     public Project getOneProject(Integer projectId) {
-        return entityManager.find(Project.class, projectId);
+        return projectRepository.findById(projectId).get();
     }
 
     public List<Project> getAllProjects() {
 
-        return entityManager.createQuery("SELECT a FROM Project a", Project.class).getResultList();
+        return projectRepository.findAll();
     }
 
     public List<Project> getUserProjects(String user) {
 
         List<Project> projects = new ArrayList<>();
-        Person person = entityManager.createQuery("SELECT p FROM Person p WHERE p.username =: username", Person.class)
-                .setParameter("username", user).getSingleResult();
-        Set<PersonsProjects> PreProject = person.getProjects();
-        for (PersonsProjects p: PreProject)
+        Person person = personRepository.findByUsername(user);
+        Set<PersonsProjects> personProjects = person.getProjects();
+        for (PersonsProjects p: personProjects)
         {projects.add(p.getProject()); }
+        projects.sort(Comparator.comparing(Project::getNumber));
         return projects;
     }
 
     public List<SectionDepartments> userDepartments(Integer projectId, String user) {
 
-        Set<SectionDepartments> sectionDepartments = entityManager.createQuery("SELECT p FROM Person p WHERE p.username =: username", Person.class)
-                .setParameter("username", user).getSingleResult().getSectionDepartments()
+        Set<SectionDepartments> sectionDepartments = personRepository.findByUsername(user).getSectionDepartments()
                 .stream().filter(e -> e.getProject().getId().equals(projectId)).collect(Collectors.toSet());
         List<SectionDepartments> sectionDepartmentsAlphabetical = new ArrayList<>(sectionDepartments);
         sectionDepartmentsAlphabetical.sort(Comparator.comparing(SectionDepartments::getSection));

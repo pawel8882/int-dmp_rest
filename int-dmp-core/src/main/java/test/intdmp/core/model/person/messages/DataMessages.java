@@ -133,26 +133,4 @@ public class DataMessages {
 
     }
 
-
-    @Transient
-    public ReplyMessage getPersonLikeSuggestPersonTheNewestSent(Integer personId) {
-        ReplyMessage replyNewest =
-            getHeader().getMessage().getReplyMessages().stream().filter(e -> e.getOwner().id == personId).max(Comparator.comparing(ReplyMessage::getTimestamp))
-                    .get();
-        return replyNewest;
-
-    }
-
-    @Transient
-    public Timestamp TheNewestTimestampForOwnerThisMessage(Integer personId) {
-        if (getHeader().getMessage().getReplyMessages().isEmpty()) {
-            return this.getHeader().getMessage().getTimestamp();
-        }
-            if (getHeader().getMessage().getReplyMessages().stream().filter(e -> e.getOwner().id == personId).findFirst().isPresent()) {
-                return getHeader().getMessage().getReplyMessages().stream().filter(e -> e.getOwner().id == personId).max(Comparator.comparing(ReplyMessage::getTimestamp))
-                        .get().getTimestamp();
-            }
-            else
-                return this.getHeader().getMessage().getTimestamp();
-        }
     }

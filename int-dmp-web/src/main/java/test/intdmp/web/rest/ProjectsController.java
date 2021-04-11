@@ -1,5 +1,6 @@
 package test.intdmp.web.rest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import test.intdmp.core.model.projects.Project;
 import test.intdmp.core.model.departmentsOnWork.Department;
@@ -12,11 +13,8 @@ import java.util.List;
 @RequestMapping("/api/projects")
 public class ProjectsController {
 
+    @Autowired
     private ProjectService projectService;
-
-    ProjectsController(ProjectService projectService) {
-        this.projectService = projectService;
-    }
 
     @RequestMapping(method = RequestMethod.GET)
     public List<Project> getProjectList(@RequestParam("user") String user) {
@@ -34,8 +32,8 @@ public class ProjectsController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public Integer createProject(@RequestBody Project project) {
-        return projectService.createProject(project);
+    public Integer createProject(@RequestBody Project project, @RequestParam("user") String user) {
+        return projectService.createProject(project, user);
     }
 
     @RequestMapping(value = "/{projectId}", method = RequestMethod.PUT)

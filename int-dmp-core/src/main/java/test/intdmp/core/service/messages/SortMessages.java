@@ -1,7 +1,6 @@
 package test.intdmp.core.service.messages;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import test.intdmp.core.model.messages.ReplyMessage;
 import test.intdmp.core.model.person.messages.InformationOnlyMessages;
 import test.intdmp.core.model.person.messages.ReceivedMessages;
@@ -18,28 +17,28 @@ import java.util.Set;
 @Component
 public class SortMessages {
 
-    public NumberAndListDisplayMessages GetSortedPinnedMessages(PaginatorFilter paginator, Set<SentMessages> sentMessages, Set<ReceivedMessages> receivedMessages, Set<InformationOnlyMessages> informationMessages, Integer projectId, Integer personId) {
-        List<DisplayMessages> ToSortedReceived = new ArrayList<>(SortReceived(receivedMessages, informationMessages, projectId, personId));
-        List<DisplayMessages> ToSortedSent = new ArrayList<>(SortSent(sentMessages, projectId, personId));
+    public NumberAndListDisplayMessages sortPinnedMessages(PaginatorFilter paginator, Set<SentMessages> sentMessages, Set<ReceivedMessages> receivedMessages, Set<InformationOnlyMessages> informationMessages, Integer projectId, Integer personId) {
+        List<DisplayMessages> ToSortedReceived = new ArrayList<>(sortReceivedAndInformationOnlyByProjectAndTimestamp(receivedMessages, informationMessages, projectId, personId));
+        List<DisplayMessages> ToSortedSent = new ArrayList<>(sortSentByProjectAndTimestamp(sentMessages, projectId, personId));
         List<DisplayMessages> ToSorted = new ArrayList<>();
         ToSorted.addAll(ToSortedReceived);
         ToSorted.addAll(ToSortedSent);
         ToSorted.sort(Comparator.comparing((DisplayMessages e) -> e.timestamp).reversed());
-        return PaginatorSort(paginator, ToSorted);
+        return sortByPaginator(paginator, ToSorted);
     }
 
-    public NumberAndListDisplayMessages GetSortedReceived(PaginatorFilter paginator, Set<ReceivedMessages> receivedMessages, Set<InformationOnlyMessages> informationMessages, Integer projectId, Integer personId) {
-        List<DisplayMessages> ToSorted = new ArrayList<>(SortReceived(receivedMessages, informationMessages, projectId, personId));
-        return PaginatorSort(paginator, ToSorted);
+    public NumberAndListDisplayMessages sortReceivedMessages(PaginatorFilter paginator, Set<ReceivedMessages> receivedMessages, Set<InformationOnlyMessages> informationMessages, Integer projectId, Integer personId) {
+        List<DisplayMessages> ToSorted = new ArrayList<>(sortReceivedAndInformationOnlyByProjectAndTimestamp(receivedMessages, informationMessages, projectId, personId));
+        return sortByPaginator(paginator, ToSorted);
     }
 
-    public NumberAndListDisplayMessages GetSortedSent(PaginatorFilter paginator, Set<SentMessages> sentMessages, Integer projectId, Integer personId) {
-        List<DisplayMessages> ToSorted = new ArrayList<>(SortSent(sentMessages, projectId, personId));
-        return PaginatorSort(paginator, ToSorted);
+    public NumberAndListDisplayMessages sortSentMessages(PaginatorFilter paginator, Set<SentMessages> sentMessages, Integer projectId, Integer personId) {
+        List<DisplayMessages> ToSorted = new ArrayList<>(sortSentByProjectAndTimestamp(sentMessages, projectId, personId));
+        return sortByPaginator(paginator, ToSorted);
     }
 
 
-    public NumberAndListDisplayMessages PaginatorSort(PaginatorFilter paginator, List<DisplayMessages> messages) {
+    public NumberAndListDisplayMessages sortByPaginator(PaginatorFilter paginator, List<DisplayMessages> messages) {
 
         List<DisplayMessages> sortMessages = new ArrayList<>(messages);
 
@@ -64,7 +63,7 @@ public class SortMessages {
         return numberAndListDisplayMessages;
     }
 
-    public List<DisplayMessages> SortReceived(Set<ReceivedMessages> receivedMessages, Set<InformationOnlyMessages> informationMessages, Integer projectId, Integer personId) {
+    public List<DisplayMessages> sortReceivedAndInformationOnlyByProjectAndTimestamp(Set<ReceivedMessages> receivedMessages, Set<InformationOnlyMessages> informationMessages, Integer projectId, Integer personId) {
         List<DisplayMessages> ToSorted = new ArrayList<>();
         receivedMessages.removeIf(e -> (e.getDataMessages().getProject().getId() != projectId));
         informationMessages.removeIf(e -> (e.getDataMessages().getProject().getId() != projectId));
@@ -85,7 +84,7 @@ public class SortMessages {
         return ToSorted;
     }
 
-    public List<DisplayMessages> SortSent(Set<SentMessages> sentMessages, Integer projectId, Integer personId) {
+    public List<DisplayMessages> sortSentByProjectAndTimestamp(Set<SentMessages> sentMessages, Integer projectId, Integer personId) {
         List<DisplayMessages> ToSorted = new ArrayList<>();
         sentMessages.removeIf(e -> (e.getDataMessages().getProject().getId() != projectId));
         sentMessages.forEach(e -> {

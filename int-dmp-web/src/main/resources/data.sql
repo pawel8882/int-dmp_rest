@@ -34,17 +34,17 @@ INSERT INTO section_departments_persons (person_id, section_department_id) VALUE
    (4, 1),
    (5, 1);
 
-  INSERT INTO persons_projects (project_id, person_id, adding_date) VALUES
+  INSERT INTO persons_projects (project_id, person_id) VALUES
 
-  (1, 1, 'dzisiaj'),
-  (2, 1, 'wczoraj'),
-  (3, 1, 'jutro'),
-  (1, 2, 'nigdy'),
-  (2, 4, 'mały jeż'),
-  (3, 4, 'lubieje'),
-  (1, 5, 'przedwczoraj'),
-  (2, 5, 'przed'),
-  (4, 3, 'za dwa dni');
+  (1, 1),
+  (2, 1),
+  (3, 1),
+  (1, 2),
+  (2, 4),
+  (3, 4),
+  (1, 5),
+  (2, 5),
+  (4, 3);
 
 
    INSERT INTO department (name, description,  section_department_id) VALUES

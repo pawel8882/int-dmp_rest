@@ -1,6 +1,7 @@
 package test.intdmp.core.service.messages._class;
 
 import test.intdmp.core.model.person.messages.CategoriesMessages;
+import test.intdmp.core.model.person.messages._enum.MessageType;
 
 
 import java.sql.Timestamp;
@@ -16,18 +17,18 @@ public class DisplayMessages {
     public Timestamp timestamp;
     public CategoriesMessages category;
     public Boolean opened;
-    public Character type;
+    public MessageType messageType;
     public Integer id;
     public Boolean pinned;
 
-        public DisplayMessages(Integer messageId, Set<SuggestPerson> toPersons, String title, Timestamp timestamp, CategoriesMessages category, Boolean opened, Character type, Integer id, Boolean pinned) {
+        public DisplayMessages(Integer messageId, Set<SuggestPerson> toPersons, String title, Timestamp timestamp, CategoriesMessages category, Boolean opened, MessageType messageType, Integer id, Boolean pinned) {
             this.messageId = messageId;
             this.toPersons= new ArrayList<>(toPersons);
             this.title = title;
             this.timestamp = timestamp;
             this.category = category;
             this.opened = opened;
-            this.type = type;
+            this.messageType = messageType;
             this.id = id;
             this.pinned = pinned;
 

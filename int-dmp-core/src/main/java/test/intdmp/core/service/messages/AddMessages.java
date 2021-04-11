@@ -1,140 +1,155 @@
 package test.intdmp.core.service.messages;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import test.intdmp.core.model.messages.Header;
 import test.intdmp.core.model.messages.Message;
 import test.intdmp.core.model.messages.ReplyMessage;
 import test.intdmp.core.model.person.messages.*;
+import test.intdmp.core.model.person.messages._enum.MessageType;
 import test.intdmp.core.model.projects.Person;
 import test.intdmp.core.model.projects.Project;
 import test.intdmp.core.service.messages._class.NewMessage;
 import test.intdmp.core.service.messages._class.SuggestPerson;
+import test.intdmp.core.service.repository.*;
 
 import javax.persistence.EntityManager;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 @Component
-public class SetMessages {
+public class AddMessages {
 
+    @Autowired
     private EntityManager entityManager;
+    @Autowired
     private ModifyMessages modifyMessages;
+    @Autowired
+    private ReceivedMessagesRepository receivedMessagesRepository;
+    @Autowired
+    private PersonRepository personRepository;
+    @Autowired
+    private DataMessagesRepository dataMessagesRepository;
+    @Autowired
+    private SentMessagesRepository sentMessagesRepository;
+    @Autowired
+    private InformationOnlyMessagesRepository informationOnlyMessagesRepository;
+    @Autowired
+    private ProjectRepository projectRepository;
+    @Autowired
+    private HeaderRepository headerRepository;
+    @Autowired
+    private InfoAboutMessagesRepository infoAboutMessagesRepository;
+    @Autowired
+    private ReplyMessagesRepository replyMessagesRepository;
+    @Autowired
+    private DataReplyMessagesRepository dataReplyMessagesRepository;
+
+
     private final String defaultCategory = "Ogólny";
 
-    public SetMessages(EntityManager entityManager, ModifyMessages modifyMessages) {
-        this.modifyMessages = modifyMessages;
-        this.entityManager = entityManager;
-    }
 
-    public Integer setMessage(NewMessage newMessage, Integer projectId, String user) {
+    public Integer addMessage(NewMessage newMessage, Integer projectId, String user) {
         Date date = new Date();
-        Person person = entityManager.createQuery("SELECT p FROM Person p WHERE p.username =: username", Person.class)
-                .setParameter("username", user).getSingleResult();
-        Project project = entityManager.getReference(Project.class, projectId);
+        Person person = personRepository.findByUsername(user);
+        Project project = projectRepository.getOneById(projectId);
         Header header = new Header();
         Message message = new Message();
         message.setContent(newMessage.content);
         message.setTimestamp(new Timestamp(date.getTime()));
         header.setTitle(newMessage.header);
         header.setMessage(message);
-        entityManager.persist(header);
+        headerRepository.save(header);
 
-        DataMessages data = new DataMessages();
+        DataMessages dataMessage = new DataMessages();
         SentMessages sentMessage = new SentMessages();
-        data.setHeader(header);
-        data.setProject(project);
-        data.setPerson(person);
-        entityManager.persist(data);
+        dataMessage.setHeader(header);
+        dataMessage.setProject(project);
+        dataMessage.setPerson(person);
+        dataMessagesRepository.save(dataMessage);
 
         InfoAboutMessages info = new InfoAboutMessages();
         info.setPinned(false);
-        entityManager.persist(info);
-        sentMessage.setCategoriesMessages(modifyMessages.getCategoryReference(person.getId(), this.defaultCategory));
+        infoAboutMessagesRepository.save(info);
+
+        sentMessage.setCategoriesMessages(modifyMessages.userCategoryReference(person.getId(), this.defaultCategory));
         sentMessage.setOpened(true);
         sentMessage.setPerson(person);
         sentMessage.setInfo(info);
-        sentMessage.setDataMessages(data);
-        sentMessage.setType();
+        sentMessage.setDataMessages(dataMessage);
         sentMessage.setTimestamp(new Timestamp(date.getTime()));
-        entityManager.persist(sentMessage);
+        sentMessagesRepository.save(sentMessage);
 
-        Integer dataMessageId = data.getId();
-        entityManager.flush();
+        Integer dataMessageId = dataMessage.getId();
 
-        setReceivedMessages(dataMessageId, newMessage.toPersons, date);
-        setInformationOnlyMessages(dataMessageId, newMessage.dwPersons, date);
+        addReceivedMessages(dataMessageId, newMessage.toPersons, date);
+        addInformationOnlyMessages(dataMessageId, newMessage.dwPersons, date);
 
         return dataMessageId;
 
     }
 
-    public void setReceivedMessages(Integer dataMessageId, List<SuggestPerson> toPersons, Date date) {
+    public void addReceivedMessages(Integer dataMessageId, List<SuggestPerson> toPersons, Date date) {
 
-        DataMessages dataMessage = entityManager.getReference(DataMessages.class, dataMessageId);
+        DataMessages dataMessage = dataMessagesRepository.getOneById(dataMessageId);
         toPersons.forEach(e -> {
             InfoAboutMessages info = new InfoAboutMessages();
             info.setPinned(false);
-            entityManager.persist(info);
+            infoAboutMessagesRepository.save(info);
             ReceivedMessages data = new ReceivedMessages();
             data.setOpened(false);
-            data.setPerson(entityManager.getReference(Person.class, e.id));
+            data.setPerson(personRepository.getOneById(e.id));
             data.setDataMessages(dataMessage);
             data.setTimestamp(new Timestamp(date.getTime()));
-            data.setCategoriesMessages(modifyMessages.getCategoryReference(e.id, this.defaultCategory));
+            data.setCategoriesMessages(modifyMessages.userCategoryReference(e.id, this.defaultCategory));
             data.setInfo(info);
-            data.setType();
-            entityManager.persist(data);
+            receivedMessagesRepository.save(data);
         });
-        entityManager.flush();
     }
 
-    public void setInformationOnlyMessages(Integer dataMessageId, List<SuggestPerson> dwPersons, Date date) {
+    public void addInformationOnlyMessages(Integer dataMessageId, List<SuggestPerson> dwPersons, Date date) {
 
-        DataMessages dataMessage = entityManager.getReference(DataMessages.class, dataMessageId);
+        DataMessages dataMessage = dataMessagesRepository.getOneById(dataMessageId);
         dwPersons.forEach(e -> {
             InfoAboutMessages info = new InfoAboutMessages();
             info.setPinned(false);
-            entityManager.persist(info);
+            infoAboutMessagesRepository.save(info);
             InformationOnlyMessages data = new InformationOnlyMessages();
             data.setOpened(false);
-            data.setPerson(entityManager.getReference(Person.class, e.id));
+            data.setPerson(personRepository.getOneById(e.id));
             data.setDataMessages(dataMessage);
             data.setTimestamp(new Timestamp(date.getTime()));
-            data.setCategoriesMessages(modifyMessages.getCategoryReference(e.id, this.defaultCategory));
+            data.setCategoriesMessages(modifyMessages.userCategoryReference(e.id, this.defaultCategory));
             data.setInfo(info);
-            data.setType();
-            entityManager.persist(data);
+            informationOnlyMessagesRepository.save(data);
         });
-        entityManager.flush();
     }
 
-    public Integer setReplyMG(Integer messageId, String user, NewMessage newMessage, Integer id, Character character) {
+    public Integer setReplyMessage(Integer messageId, String user, NewMessage newMessage, Integer id, MessageType character) {
 
         Date date = new Date();
         DataReplyMessages replyData = new DataReplyMessages();
         ReplyMessage reply = new ReplyMessage();
 
-        Message message = entityManager.getReference(DataMessages.class, messageId).getHeader().getMessage();
-        Person person = entityManager.createQuery("SELECT p FROM Person p WHERE p.username =: username", Person.class)
-                .setParameter("username", user).getSingleResult();
+        Message message = dataMessagesRepository.getOneById(messageId).getHeader().getMessage();
+        Person person = personRepository.findByUsername(user);
 
         reply.setContent(newMessage.content);
         reply.setTimestamp(new Timestamp(date.getTime()));
         reply.setMessage(message);
+
+        replyMessagesRepository.save(reply);
+
         replyData.setReplyMessage(reply);
         replyData.setDataMessages(message.getHeader().getDataMessages());
         replyData.setPerson(person);
 
-        entityManager.persist(reply);
-        entityManager.persist(replyData);
+        dataReplyMessagesRepository.save(replyData);
 
 
-        DataMessages dataMessage = entityManager.getReference(DataMessages.class, messageId);
-        trySetNewSentMessageOrElseCreateNew(person, dataMessage, id, date);
+        DataMessages dataMessage = dataMessagesRepository.getOneById(messageId);
+        tryModifySentMessageOrElseCreateNew(person, dataMessage, id, date);
 
 
         if (person.getId() == dataMessage.getPerson().getId())
@@ -148,7 +163,7 @@ public class SetMessages {
 
     }
 
-    private void trySetNewSentMessageOrElseCreateNew(Person person, DataMessages dataMessage, Integer id, Date date) {
+    private void tryModifySentMessageOrElseCreateNew(Person person, DataMessages dataMessage, Integer id, Date date) {
 
         Boolean isPresent = false;
         try { isPresent = dataMessage.getSentMessages().stream().filter(e -> e.getPerson().getId().equals(person.getId())).findFirst()
@@ -157,23 +172,25 @@ public class SetMessages {
         catch (Exception e) {
         }
         if (!isPresent)
-            createNewSentMessage(date, dataMessage, person, id);
+            createSentMessage(date, dataMessage, person, id);
     }
 
-    private SentMessages createNewSentMessage(Date date, DataMessages dataMessage, Person person, Integer id) {
+    private void createSentMessage(Date date, DataMessages dataMessage, Person person, Integer id) {
 
         SentMessages sentMessage = new SentMessages();
         sentMessage.setTimestamp(new Timestamp(date.getTime()));
         sentMessage.setOpened(true);
         sentMessage.setDataMessages(dataMessage);
         sentMessage.setPerson(person);
-        sentMessage.setInfo(modifyMessages.findReceivedMessage(id).getInfo());
-        sentMessage.setType();
-        sentMessage.setCategoriesMessages(modifyMessages.getCategoryReference(person.getId(), defaultCategory));
-        entityManager.persist(sentMessage);
+        sentMessage.setInfo(receivedMessagesRepository.getOneById(id).getInfo());
+        sentMessage.setCategoriesMessages(modifyMessages.userCategoryReference(person.getId(), defaultCategory));
+        sentMessagesRepository.save(sentMessage);
 
-        return sentMessage;
+    }
 
+    private void updateSentMessage(SentMessages sentMessage, Date date) {
+        sentMessage.setTimestamp(new Timestamp(date.getTime()));
+        sentMessagesRepository.save(sentMessage);
     }
 
     private void updateSentAndReceivedMessagesOwnerReply(Date date, DataMessages dataMessage, Person person) {
@@ -182,7 +199,7 @@ public class SetMessages {
                 e -> {
                     e.setTimestamp(new Timestamp(date.getTime()));
                     e.setOpened(false);
-                    entityManager.merge(e);
+                    informationOnlyMessagesRepository.save(e);
                 }
         );
         dataMessage.getReceivedMessages().forEach(
@@ -190,7 +207,7 @@ public class SetMessages {
                     if (person.getId() != e.getPerson().getId()) {
                         e.setTimestamp(new Timestamp(date.getTime()));
                         e.setOpened(false);
-                        entityManager.merge(e);
+                        receivedMessagesRepository.save(e);
                     }
                 });
     }
@@ -203,7 +220,7 @@ public class SetMessages {
                     if (e.id == u.getPerson().getId() && e.id != person.getId()) {
                         u.setOpened(false);
                         u.setTimestamp(new Timestamp(date.getTime()));
-                        entityManager.merge(u);
+                        receivedMessagesRepository.save(u);
                     }
                 }));
         if (!dataMessage.getReceivedMessages().stream().filter(e -> e.getPerson().getId().equals(dataMessage.getPerson().getId())).findFirst().isPresent()) {
@@ -211,26 +228,14 @@ public class SetMessages {
             ReceivedMessages receivedMessage = new ReceivedMessages();
             receivedMessage.setTimestamp(new Timestamp(date.getTime()));
             receivedMessage.setOpened(false);
-            receivedMessage.setPerson(entityManager.getReference(Person.class, dataMessage.getPerson().getId()));
+            receivedMessage.setPerson(personRepository.getOneById(dataMessage.getPerson().getId()));
             receivedMessage.setDataMessages(dataMessage);
-            receivedMessage.setCategoriesMessages(modifyMessages.getCategoryReference(dataMessage.getPerson().getId(), defaultCategory));
-            receivedMessage.setType();
+            receivedMessage.setCategoriesMessages(modifyMessages.userCategoryReference(dataMessage.getPerson().getId(), defaultCategory));
             dataMessage.getSentMessages().stream().filter(e -> e.getPerson().getId().equals(dataMessage.getPerson().getId())).findFirst().map(u -> { receivedMessage.setInfo(u.getInfo()); return u; });
-            entityManager.persist(receivedMessage);
+            receivedMessagesRepository.save(receivedMessage);
         }
 
     }
 
-    public List<CategoriesMessages> getCategories(String user) {
-        List<CategoriesMessages> categories = new ArrayList<>(entityManager.createQuery("SELECT p FROM Person p WHERE p.username =: username", Person.class)
-                .setParameter("username", user).getSingleResult().getCategories());
-        categories.sort(Comparator.comparing(e -> e.getCategory()));
-        return categories;
-    }
-
-    private void updateSentMessage(SentMessages sentMessage, Date date) {
-        sentMessage.setTimestamp(new Timestamp(date.getTime()));
-        entityManager.merge(sentMessage);
-    }
 
 }

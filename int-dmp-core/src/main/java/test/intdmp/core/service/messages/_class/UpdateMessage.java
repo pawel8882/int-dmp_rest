@@ -1,22 +1,17 @@
 package test.intdmp.core.service.messages._class;
 
-import test.intdmp.core.model.person.messages.CategoriesMessages;
-
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import test.intdmp.core.model.person.messages._enum.MessageType;
 
 public class UpdateMessage {
 
     public Integer messageId;
-    public Character type;
+    public MessageType messageType;
     public Integer id;
     public Boolean pinned;
 
-    public UpdateMessage(Integer messageId, Character type, Integer id, Boolean pinned) {
+    public UpdateMessage(Integer messageId, MessageType messageType, Integer id, Boolean pinned) {
         this.messageId = messageId;
-        this.type = type;
+        this.messageType = messageType;
         this.id = id;
         this.pinned = pinned;
 

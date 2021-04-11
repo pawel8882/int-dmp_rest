@@ -3,6 +3,7 @@ package test.intdmp.core.model.projects;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 public class PersonsProjects {
@@ -10,7 +11,7 @@ public class PersonsProjects {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-    public String addingDate;
+    private Timestamp addingDate;
 
     @ManyToOne
     @JoinColumn(name = "project_id")
@@ -18,6 +19,7 @@ public class PersonsProjects {
 
     @JsonIgnoreProperties("persons")
     public Project getProject() { return project; }
+    public void setProject(Project project) { this.project = project; }
 
     @ManyToOne
     @JoinColumn(name = "person_id")
@@ -25,10 +27,14 @@ public class PersonsProjects {
 
     @JsonIgnoreProperties("projects")
     public Person getPerson() { return person; }
+    public void setPerson(Person person) { this.person = person; }
 
 
-    public String getAddingDate() {
+    public Timestamp getAddingDate() {
         return addingDate;
+    }
+    public void setAddingDate(Timestamp timestamp) {
+        this.addingDate = timestamp;
     }
 
 }
