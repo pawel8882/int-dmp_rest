@@ -50,19 +50,26 @@ public class CategoriesMessages implements Serializable {
     @JsonIgnore
     public Set<SentMessages> getSentMessages() { return sentMessages; }
     @JsonIgnore
-    public Set<SentMessages> getPinnedSentMessages() { return sentMessages.stream().filter(e -> e.getInfo().getPinned().equals(true)).collect(Collectors.toSet()); }
+    public Set<SentMessages> getPinnedSentMessages() { return sentMessages.stream().filter(e -> e.getInfo()
+            .getPinned()
+            .equals(true))
+            .collect(Collectors.toSet()); }
     public void setSentMessages(Set<SentMessages> sentMessages) { this.sentMessages = sentMessages; }
 
     @JsonIgnore
     public Set<InformationOnlyMessages> getInformationOnlyMessages() { return informationOnlyMessages; }
     @JsonIgnore
-    public Set<InformationOnlyMessages> getPinnedInformationOnlyMessages() { return informationOnlyMessages.stream().filter(e -> e.getInfo().getPinned().equals(true)).collect(Collectors.toSet()); }
+    public Set<InformationOnlyMessages> getPinnedInformationOnlyMessages() { return informationOnlyMessages.stream().filter(e -> e.getInfo()
+            .getPinned().equals(true))
+            .collect(Collectors.toSet()); }
     public void setInformationOnlyMessages(Set<InformationOnlyMessages> informationOnlyMessages) { this.informationOnlyMessages = informationOnlyMessages; }
 
     @JsonIgnore
     public Set<ReceivedMessages> getReceivedMessages() { return receivedMessages; }
     @JsonIgnore
-    public Set<ReceivedMessages> getPinnedReceivedMessages() { return receivedMessages.stream().filter(e -> e.getInfo().getPinned().equals(true)).collect(Collectors.toSet()); }
+    public Set<ReceivedMessages> getPinnedReceivedMessages() { return receivedMessages.stream().filter(e -> e.getInfo()
+            .getPinned().equals(true))
+            .collect(Collectors.toSet()); }
     public void setReceivedMessages(Set<ReceivedMessages> receivedMessages) { this.receivedMessages = receivedMessages; }
 
 

@@ -82,7 +82,8 @@ public class CollectMessages {
         DataMessages dataMessage = dataMessagesRepository.findById(messageId).get();
         String Header = dataMessage.getHeader().getTitle();
         Message message = dataMessage.getHeader().getMessage();
-        SuggestPerson owner = new SuggestPerson(dataMessage.getPerson().getId(), dataMessage.getPerson().getFirstName() + " " + dataMessage.getPerson().getLastName());
+        SuggestPerson owner = new SuggestPerson(dataMessage.getPerson().getId(),
+                dataMessage.getPerson().getFirstName() + " " + dataMessage.getPerson().getLastName());
         List<SuggestPerson> toPersons = new ArrayList<>(dataMessage.getPersonsDO());
         List<SuggestPerson> dwPersons = new ArrayList<>(dataMessage.getPersonsDW());
         Boolean pinned = checkIfMessageIsPinned(id, messageType);

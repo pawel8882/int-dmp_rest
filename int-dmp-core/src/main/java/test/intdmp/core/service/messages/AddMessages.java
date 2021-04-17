@@ -223,7 +223,9 @@ public class AddMessages {
                         receivedMessagesRepository.save(u);
                     }
                 }));
-        if (!dataMessage.getReceivedMessages().stream().filter(e -> e.getPerson().getId().equals(dataMessage.getPerson().getId())).findFirst().isPresent()) {
+        if (!dataMessage.getReceivedMessages().stream()
+                .filter(e -> e.getPerson()
+                        .getId().equals(dataMessage.getPerson().getId())).findFirst().isPresent()) {
 
             ReceivedMessages receivedMessage = new ReceivedMessages();
             receivedMessage.setTimestamp(new Timestamp(date.getTime()));
@@ -231,7 +233,8 @@ public class AddMessages {
             receivedMessage.setPerson(personRepository.getOneById(dataMessage.getPerson().getId()));
             receivedMessage.setDataMessages(dataMessage);
             receivedMessage.setCategoriesMessages(modifyMessages.userCategoryReference(dataMessage.getPerson().getId(), defaultCategory));
-            dataMessage.getSentMessages().stream().filter(e -> e.getPerson().getId().equals(dataMessage.getPerson().getId())).findFirst().map(u -> { receivedMessage.setInfo(u.getInfo()); return u; });
+            dataMessage.getSentMessages().stream()
+                    .filter(e -> e.getPerson().getId().equals(dataMessage.getPerson().getId())).findFirst().map(u -> { receivedMessage.setInfo(u.getInfo()); return u; });
             receivedMessagesRepository.save(receivedMessage);
         }
 

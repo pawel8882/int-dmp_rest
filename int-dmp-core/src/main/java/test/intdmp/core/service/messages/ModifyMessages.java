@@ -43,12 +43,18 @@ public class ModifyMessages {
     public Boolean setOrUnsetPinned(UpdateMessage updateMessage, Integer messageId, String user) {
 
         DataMessages dataMessage = dataMessagesRepository.getOneById(messageId);
-        if(updateMessage.messageType.equals(MessageType.SENT)) {return dataMessage.getSentMessages().stream().filter(u -> u.getId().equals(updateMessage.id))
-                .findFirst().map(e -> { e.getInfo().setPinned(updateMessage.pinned); return e;}).get().getInfo().getPinned(); }
-        if(updateMessage.messageType.equals(MessageType.RECEIVED)) {return dataMessage.getReceivedMessages().stream().filter(u -> u.getId().equals(updateMessage.id))
-                .findFirst().map(e -> { e.getInfo().setPinned(updateMessage.pinned); return e;}).get().getInfo().getPinned(); }
-        if(updateMessage.messageType.equals(MessageType.INFORMATION)) {return dataMessage.getInformationOnlyMessages().stream().filter(u -> u.getId().equals(updateMessage.id))
-                .findFirst().map(e -> { e.getInfo().setPinned(updateMessage.pinned); return e;}).get().getInfo().getPinned(); }
+        if(updateMessage.messageType.equals(MessageType.SENT))
+        {return dataMessage.getSentMessages().stream().filter(u -> u.getId().equals(updateMessage.id))
+                .findFirst()
+                .map(e -> { e.getInfo().setPinned(updateMessage.pinned); return e;}).get().getInfo().getPinned(); }
+        if(updateMessage.messageType.equals(MessageType.RECEIVED))
+        {return dataMessage.getReceivedMessages().stream().filter(u -> u.getId().equals(updateMessage.id))
+                .findFirst()
+                .map(e -> { e.getInfo().setPinned(updateMessage.pinned); return e;}).get().getInfo().getPinned(); }
+        if(updateMessage.messageType.equals(MessageType.INFORMATION))
+        {return dataMessage.getInformationOnlyMessages().stream().filter(u -> u.getId().equals(updateMessage.id))
+                .findFirst()
+                .map(e -> { e.getInfo().setPinned(updateMessage.pinned); return e;}).get().getInfo().getPinned(); }
 
         return !updateMessage.pinned;
 

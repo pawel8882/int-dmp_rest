@@ -1,5 +1,6 @@
 package test.intdmp.core.service.messages;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import test.intdmp.core.model.messages.ReplyMessage;
 import test.intdmp.core.model.person.messages.InformationOnlyMessages;
@@ -8,6 +9,7 @@ import test.intdmp.core.model.person.messages.SentMessages;
 import test.intdmp.core.service.messages._class.DisplayMessages;
 import test.intdmp.core.service.messages._class.NumberAndListDisplayMessages;
 import test.intdmp.core.service.messages._class.PaginatorFilter;
+import test.intdmp.core.service.messages.displayMessageCreator.DisplayMessageCreator;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -16,6 +18,9 @@ import java.util.Set;
 
 @Component
 public class SortMessages {
+
+    @Autowired
+    private DisplayMessageCreator displayMessageCreator;
 
     public NumberAndListDisplayMessages sortPinnedMessages(PaginatorFilter paginator, Set<SentMessages> sentMessages, Set<ReceivedMessages> receivedMessages, Set<InformationOnlyMessages> informationMessages, Integer projectId, Integer personId) {
         List<DisplayMessages> ToSortedReceived = new ArrayList<>(sortReceivedAndInformationOnlyByProjectAndTimestamp(receivedMessages, informationMessages, projectId, personId));
@@ -70,16 +75,15 @@ public class SortMessages {
         receivedMessages.forEach(e -> {
             if (e.getDataMessages().getHeader().getMessage().getReplyMessages().stream().filter(u -> u.getOwner().id != personId).findFirst().isPresent()) {
                 ReplyMessage replyMessage = e.getDataMessages().getPersonReplyMessageTheNewest(personId);
-                ToSorted.add(new DisplayMessages(e.getDataMessages().getId(), replyMessage.getOwnerLikeSet(), e.getDataMessages().getHeader().getTitle(), replyMessage.getTimestamp(), e.getCategory(), e.getOpened(), e.getType(), e.getId(), e.getInfo().getPinned()));
+                ToSorted.add(displayMessageCreator.CreateReceivedNewestReplyMessage(e, replyMessage));
             } else {
-                ToSorted.add(new DisplayMessages(e.getDataMessages().getId(), e.getDataMessages().getPersonLikeSuggestPersonTheNewest(personId), e.getDataMessages().getHeader().getTitle(), e.getTimestamp(), e.getCategory(), e.getOpened(), e.getType(), e.getId(), e.getInfo().getPinned()));
-
+                ToSorted.add(displayMessageCreator.CreateReceivedOwnerIsPresent(e));
             }
 
         });
         informationMessages.forEach(e -> {
-            ToSorted.add(new DisplayMessages(e.getDataMessages().getId(), e.getDataMessages().getPersonLikeSuggestPersonTheNewest(personId), e.getDataMessages().getHeader().getTitle(), e.getTimestamp(), e.getCategory(), e.getOpened(), e.getType(), e.getId(), e.getInfo().getPinned()));
-        });
+                    ToSorted.add(displayMessageCreator.CreateInformationOnly(e));
+                    });
         ToSorted.sort(Comparator.comparing((DisplayMessages e) -> e.timestamp).reversed());
         return ToSorted;
     }
@@ -88,8 +92,9 @@ public class SortMessages {
         List<DisplayMessages> ToSorted = new ArrayList<>();
         sentMessages.removeIf(e -> (e.getDataMessages().getProject().getId() != projectId));
         sentMessages.forEach(e -> {
-            ToSorted.add(new DisplayMessages(e.getDataMessages().getId(), e.getDataMessages().getPersonsWithoutCurrentUser(personId), e.getDataMessages().getHeader().getTitle(), e.getTimestamp(), e.getCategory(), e.getOpened(), e.getType(), e.getId(), e.getInfo().getPinned()));
-        });
+                    ToSorted.add(displayMessageCreator.CreateSent(e));
+                }
+            );
         ToSorted.sort(Comparator.comparing((DisplayMessages e) -> e.timestamp).reversed());
         return ToSorted;
     }

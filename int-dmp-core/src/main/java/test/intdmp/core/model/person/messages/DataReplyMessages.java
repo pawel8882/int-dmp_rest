@@ -35,5 +35,6 @@ public class DataReplyMessages {
     public DataMessages getDataMessages() { return dataMessages; }
     public void setDataMessages(DataMessages dataMessages) { this.dataMessages = dataMessages; }
 
-    public SuggestPerson getSuggestPerson() { return new SuggestPerson(person.getId(), person.getFirstName() + " " + person.getLastName()); }
+    public SuggestPerson getSuggestPerson() { return new SuggestPerson(person.getId(),
+            person.getFirstName() + " " + person.getLastName()); }
 }

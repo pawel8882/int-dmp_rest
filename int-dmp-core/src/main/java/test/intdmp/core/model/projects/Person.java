@@ -99,7 +99,11 @@ public class Person implements Serializable {
         return receivedMessages;
     }
     @JsonIgnore
-    public Set<ReceivedMessages> getPinnedReceivedMessages() { return receivedMessages.stream().filter(e -> e.getInfo().getPinned().equals(true)).collect(Collectors.toSet()); }
+    public Set<ReceivedMessages> getPinnedReceivedMessages() { return receivedMessages.stream()
+            .filter(e -> e.getInfo()
+                    .getPinned()
+                    .equals(true))
+            .collect(Collectors.toSet()); }
 
 
     @JsonIgnore
@@ -108,7 +112,9 @@ public class Person implements Serializable {
     }
     @JsonIgnore
     public Set<InformationOnlyMessages> getPinnedInformationOnlyMessages() { return informationOnlyMessages.stream()
-            .filter(e -> e.getInfo().getPinned().equals(true) && e.getInfo().getReceivedMessages() == null)
+            .filter(e -> e.getInfo()
+                    .getPinned()
+                    .equals(true) && e.getInfo().getReceivedMessages() == null)
             .collect(Collectors.toSet());
     }
 
@@ -121,8 +127,10 @@ public class Person implements Serializable {
     public Set<SentMessages> getSentMessages() { return sentMessages; }
     @JsonIgnore
     public Set<SentMessages> getPinnedSentMessages() { return sentMessages.stream()
-            .filter(e -> e.getInfo().getPinned()
-                    .equals(true) && e.getInfo().getReceivedMessages() == null && e.getInfo().getInformationOnlyMessage() == null).collect(Collectors.toSet()); }
+            .filter(e -> e.getInfo()
+                    .getPinned()
+                    .equals(true) && e.getInfo().getReceivedMessages() == null && e.getInfo().getInformationOnlyMessage() == null)
+            .collect(Collectors.toSet()); }
     public void setSentMessages(Set<SentMessages> sentMessages) { this.sentMessages = sentMessages; }
 
     @JsonIgnore

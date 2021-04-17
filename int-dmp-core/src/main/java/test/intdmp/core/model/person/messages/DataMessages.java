@@ -79,7 +79,8 @@ public class DataMessages {
     public Set<SuggestPerson> getPersonsDO() {
         Set<SuggestPerson> persons = new HashSet<>();
         this.receivedMessages.forEach(e -> {
-            SuggestPerson person = new SuggestPerson(e.getPerson().getId(), e.getPerson().getFirstName() + " " + e.getPerson().getLastName());
+            SuggestPerson person = new SuggestPerson(e.getPerson().getId(),
+                    e.getPerson().getFirstName() + " " + e.getPerson().getLastName());
             persons.add(person);
         });
         return persons;
@@ -89,7 +90,8 @@ public class DataMessages {
     public Set<SuggestPerson> getPersonsDW() {
         Set<SuggestPerson> persons = new HashSet<>();
         this.informationOnlyMessages.forEach(e -> {
-            SuggestPerson person = new SuggestPerson(e.getPerson().getId(), e.getPerson().getFirstName() + " " + e.getPerson().getLastName());
+            SuggestPerson person = new SuggestPerson(e.getPerson().getId(),
+                    e.getPerson().getFirstName() + " " + e.getPerson().getLastName());
             persons.add(person);
         });
         return persons;
@@ -101,7 +103,8 @@ public class DataMessages {
         Set<SuggestPerson> persons = new HashSet<>();
         this.receivedMessages.forEach(e -> {
             if(e.getPerson().getId() != personId) {
-                SuggestPerson person = new SuggestPerson(e.getPerson().getId(), e.getPerson().getFirstName() + " " + e.getPerson().getLastName());
+                SuggestPerson person = new SuggestPerson(e.getPerson().getId(),
+                        e.getPerson().getFirstName() + " " + e.getPerson().getLastName());
                 persons.add(person);
             }
         });
@@ -111,12 +114,13 @@ public class DataMessages {
 
     @Transient
     private SuggestPerson getOwner() {
-        SuggestPerson person = new SuggestPerson(getPerson().getId(), getPerson().getFirstName() + " " + getPerson().getLastName());
+        SuggestPerson person = new SuggestPerson(getPerson().getId(),
+                getPerson().getFirstName() + " " + getPerson().getLastName());
         return person;
     }
 
     @Transient
-    public Set<SuggestPerson> getPersonLikeSuggestPersonTheNewest(Integer personId) {
+    public Set<SuggestPerson> getOwnerLikeSet() {
         Set<SuggestPerson> persons = new HashSet<>();
             persons.add(getOwner());
         return persons;
@@ -126,9 +130,9 @@ public class DataMessages {
     @Transient
     public ReplyMessage getPersonReplyMessageTheNewest(Integer personId) {
         ReplyMessage replyMessage =
-            getHeader().getMessage().getReplyMessages().stream().filter(e -> e.getOwner().id != personId).max(Comparator.comparing(ReplyMessage::getTimestamp))
+            getHeader().getMessage().getReplyMessages().stream().filter(e -> e.getOwner().id != personId)
+                    .max(Comparator.comparing(ReplyMessage::getTimestamp))
                     .get();
-
         return replyMessage;
 
     }
