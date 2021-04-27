@@ -3,6 +3,7 @@ package test.intdmp.core.model.projects;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import test.intdmp.core.model.files.FileIndex;
 import test.intdmp.core.model.person.messages.*;
 
 import javax.persistence.*;
@@ -41,6 +42,8 @@ public class Person implements Serializable {
             joinColumns = @JoinColumn(name = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "section_department_id"))
     private Set<SectionDepartments> sectionDepartments;
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<FileIndex> files;
 
     public Integer getId() {
         return id;

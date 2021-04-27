@@ -1,6 +1,7 @@
 package test.intdmp.core.model.departmentsOnWork;
 
 import com.fasterxml.jackson.annotation.*;
+import test.intdmp.core.model.files.FileIndex;
 import test.intdmp.core.model.projects.SectionDepartments;
 
 import javax.persistence.*;
@@ -21,6 +22,9 @@ public class Department implements Serializable {
     @JoinColumn(name ="section_department_id")
     public SectionDepartments sectionDepartment;
 
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<FileIndex> files;
+
 
     public Integer getId() {
         return id;
@@ -30,6 +34,9 @@ public class Department implements Serializable {
     }
     public String getDescription() {
         return description;
+    }
+    public Set<FileIndex> getFiles() {
+        return files;
     }
 
 }

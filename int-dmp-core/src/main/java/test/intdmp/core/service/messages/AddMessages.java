@@ -1,6 +1,7 @@
 package test.intdmp.core.service.messages;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import test.intdmp.core.model.messages.Header;
 import test.intdmp.core.model.messages.Message;
