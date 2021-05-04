@@ -11,12 +11,12 @@ INSERT INTO Project (name, complete, number) VALUES
     (3,'z nadzieniem czekoladowym'),
     (4,'zawijany w super rulon makowy');
 
-   INSERT INTO section_departments (section, description, project_id) VALUES
+   INSERT INTO section_departments (section, description, project_id, code) VALUES
 
-   ('Architektura', 'Krajobraz', 1),
-   ('Konstrukcja stalowa', 'Płatwie, dźwigary', 1),
-   ('Konstrukcja żelbetowa', 'słupy, podciągi', 1),
-   ('Instalacje', 'elektryczne, wetnylacja', 1);
+   ('Architektura', 'Krajobraz', 1, 'ARCH'),
+   ('Konstrukcja stalowa', 'Płatwie, dźwigary', 1, 'KOST'),
+   ('Konstrukcja żelbetowa', 'słupy, podciągi', 1, 'KOZB'),
+   ('Instalacje', 'elektryczne, wetnylacja', 1, 'INST');
 
      INSERT INTO Person (first_name, last_name, role, username) VALUES
         ('Jan', 'Jan','inżynier', 'janko'),
@@ -47,18 +47,18 @@ INSERT INTO section_departments_persons (person_id, section_department_id) VALUE
   (4, 3);
 
 
-   INSERT INTO department (name, description,  section_department_id) VALUES
+   INSERT INTO department (name, description,  section_department_id, code) VALUES
 
-   ('Hala', 'Krajobraz', 1),
-   ('Budynek biurowy', 'wentylacja, tryskaczowa, elektryczna', 1),
-   ('Płatwie', 'stalowa, żelbetowa', 2),
-   ('Podciągi', 'z betonu', 2),
-   ('Blacha trapezowa', 'Krajobraz', 2),
-   ('Sciany żelbetowe', 'wentylacja, tryskaczowa, elektryczna', 3),
-   ('Słupy', 'stalowa, żelbetowa', 3),
-   ('Podciągi', 'z betonu', 3),
-   ('Wentylacja', 'Krajobraz', 4),
-   ('Elektryka', 'wentylacja, tryskaczowa, elektryczna', 4);
+   ('Hala', 'Krajobraz', 1, 'KRAJ'),
+   ('Budynek biurowy', 'wentylacja, tryskaczowa, elektryczna', 1, 'TRYS'),
+   ('Płatwie', 'stalowa, żelbetowa', 2, 'PLST'),
+   ('Podciągi', 'z betonu', 2, 'PDZB'),
+   ('Blacha trapezowa', 'Krajobraz', 2, 'BLTR'),
+   ('Sciany żelbetowe', 'wentylacja, tryskaczowa, elektryczna', 3, 'SCZZ'),
+   ('Słupy', 'stalowa, żelbetowa', 3, 'SSZE'),
+   ('Podciągi', 'z betonu', 3, 'PDZB'),
+   ('Wentylacja', 'Krajobraz', 4, 'WETK'),
+   ('Elektryka', 'wentylacja, tryskaczowa, elektryczna', 4, 'ELEK');
 
 
 

@@ -77,6 +77,18 @@ public class Project implements Serializable {
         return dataMessages;
     }
 
+    @JsonIgnore
+    public Set<SectionDepartments> getSectionsDepartments() {
+        return sectionsDepartments;
+    }
+
+    @JsonIgnore
+    public Set<Department> getDepartments() {
+        Set<Department> departments = new HashSet<>();
+        sectionsDepartments.forEach(e -> departments.addAll(e.getDepartments()));
+        return departments;
+    }
+
     public void setDataMessages(Set<DataMessages> dataMessage) {
         this.dataMessages = dataMessage;
     }
